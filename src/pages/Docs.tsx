@@ -38,7 +38,7 @@ const Docs = () => {
                 <IonButton>Judetean</IonButton>
               </IonCol>
               <IonCol className="ion-text-center">
-                <IonButton>Central</IonButton>
+                <IonButton routerLink="/organigrama">Central</IonButton>
               </IonCol>
             </IonRow>
           </IonCardHeader>

@@ -42,11 +42,16 @@ const Login: React.FC = () => {
                 fill="outline"
                 className="ion-margin-top"
               />
-              <IonButton type="submit" className="ion-margin-top" expand="full">
+              <IonButton
+                routerLink="/home/avizier"
+                type="button"
+                className="ion-margin-top"
+                expand="full"
+              >
                 Login
               </IonButton>
               <IonButton
-                routerLink="/Profil"
+                routerLink="/profil"
                 type="button"
                 className="ion-margin-top"
                 expand="full"

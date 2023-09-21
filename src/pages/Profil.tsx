@@ -32,7 +32,11 @@ const Profil = () => {
           <IonButton className="ion-padding-top" expand="block">
             Editeaza profilul
           </IonButton>
-          <IonButton className="ion-padding-top" expand="block">
+          <IonButton
+            routerLink="/docs"
+            className="ion-padding-top"
+            expand="block"
+          >
             Grupuri tematice
           </IonButton>
           <IonButton className="ion-padding-top" expand="block">
