@@ -80,7 +80,9 @@ const Avizier: React.FC = (isMember) => {
               <IonCardContent>
                 <div>Esti nembru in filiala Craiova</div>
                 <div>Situatia cotizatiei: Achitat la zi</div>
-                <IonButton expand="full">Doneaza SDB</IonButton>
+                <IonButton routerLink="/plata" expand="full">
+                  Doneaza SDB
+                </IonButton>
                 <IonButton routerLink="/adeziune" expand="full">
                   Alatura-te SDB
                 </IonButton>

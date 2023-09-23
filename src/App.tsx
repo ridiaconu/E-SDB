@@ -37,6 +37,7 @@ import Adeziune from "./pages/Adeziune";
 import Docs from "./pages/Docs";
 import Home from "./pages/Home";
 import Organigrama from "./pages/Organigrama";
+import Plata from "./pages/Plata";
 
 setupIonicReact();
 
@@ -51,6 +52,7 @@ const App: React.FC = () => (
         <Route component={Adeziune} path="/adeziune" />
         <Route component={Docs} path="/docs" />
         <Route component={Home} path="/home" />
+        <Route component={Plata} path="/plata" />
         <Route component={Organigrama} path="/organigrama" />
       </IonRouterOutlet>
     </IonReactRouter>

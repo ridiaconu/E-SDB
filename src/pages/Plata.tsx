@@ -36,10 +36,8 @@ const Adeziune = () => {
       </IonHeader>
       <IonContent>
         <div className="ion-padding">
-          <h1 className="ion-text-center">Hai alaturi de noi!</h1>
-          <h2 className="ion-text-center ion-margin-top">
-            Te rugam sa completezi rubricile de mai jos
-          </h2>
+          <h1 className="ion-text-center">Plata Cotizatie</h1>
+          <h2 className="ion-text-center ion-margin-top">Date Platitor</h2>
           <IonCard>
             <IonCardContent>
               <form onSubmit={doLogin}>
@@ -61,46 +59,43 @@ const Adeziune = () => {
                   fill="outline"
                   className="ion-margin-top"
                 />
+                <IonInput
+                  label="Telefon"
+                  labelPlacement="floating"
+                  type="tel"
+                  fill="outline"
+                  className="ion-margin-top"
+                />
 
                 <IonGrid>
                   <IonRow>
                     <IonCol>
-                      <IonItem>
-                        <IonList>
-                          <IonItem>
-                            <IonSelect
-                              aria-label="Judet"
-                              interface="action-sheet"
-                              placeholder="Judet"
-                            >
-                              <IonSelectOption value="DJ">Dolj</IonSelectOption>
-                              <IonSelectOption value="GJ">Gorj</IonSelectOption>
-                              <IonSelectOption value="VL">
-                                Valcea
-                              </IonSelectOption>
-                            </IonSelect>
-                          </IonItem>
-                        </IonList>
-                      </IonItem>
+                      {" "}
+                      <IonInput
+                        label="Oras de domiciliu"
+                        labelPlacement="floating"
+                        fill="outline"
+                      />
                     </IonCol>
                     <IonCol>
-                      <IonItem>
+                      <IonItem className="ion-margin-top">
                         {" "}
                         <IonList>
                           <IonItem>
                             <IonSelect
-                              aria-label="Oras"
+                              className="never-flip"
+                              aria-label="Tara"
                               interface="action-sheet"
-                              placeholder="Oras"
+                              placeholder="Tara"
                             >
-                              <IonSelectOption value="DJ">
-                                Craiova
+                              <IonSelectOption value="RO">
+                                Romania
                               </IonSelectOption>
-                              <IonSelectOption value="GJ">
-                                Targu Jiu
+                              <IonSelectOption value="EU">
+                                Spatiul Economic European
                               </IonSelectOption>
-                              <IonSelectOption value="VL">
-                                Ramnicu Valcea
+                              <IonSelectOption value="NOEU">
+                                Tara in afara spatiului econimic european
                               </IonSelectOption>
                             </IonSelect>
                           </IonItem>
@@ -109,20 +104,19 @@ const Adeziune = () => {
                     </IonCol>
                   </IonRow>
                 </IonGrid>
-                <IonCheckbox labelPlacement="end">
-                  <IonLabel className="ion-text-wrap">
-                    Sunt de acord ca partidul SDB sa imi prelucreze datele
-                    personale in conformitate cu reglementarile nationale si
-                    europene in domeniul acesta
-                  </IonLabel>
-                </IonCheckbox>
+                <IonInput
+                  label="Suma"
+                  labelPlacement="floating"
+                  type="number"
+                  fill="outline"
+                />
                 <IonButton
                   routerLink="/home/avizier"
                   type="button"
                   className="ion-margin-top"
                   expand="full"
                 >
-                  Trimite
+                  Plateste
                 </IonButton>
               </form>
             </IonCardContent>
