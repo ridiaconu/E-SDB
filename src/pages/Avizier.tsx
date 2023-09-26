@@ -11,8 +11,7 @@ import {
 } from "@ionic/react";
 import React from "react";
 
-const Avizier: React.FC = (isMember) => {
-  isMember = false;
+const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
   switch (isMember) {
     case true:
       return (
@@ -29,7 +28,7 @@ const Avizier: React.FC = (isMember) => {
               <IonCardContent>
                 <div>Esti nembru in filiala Craiova</div>
                 <div>Situatia cotizatiei: Achitat la zi</div>
-                <IonButton expand="full">
+                <IonButton routerLink="/plata/cotizatie" expand="full">
                   Plateste cotizatia cu cardul
                 </IonButton>
               </IonCardContent>
@@ -80,7 +79,7 @@ const Avizier: React.FC = (isMember) => {
               <IonCardContent>
                 <div>Esti nembru in filiala Craiova</div>
                 <div>Situatia cotizatiei: Achitat la zi</div>
-                <IonButton routerLink="/plata" expand="full">
+                <IonButton routerLink="/plata/" expand="full">
                   Doneaza SDB
                 </IonButton>
                 <IonButton routerLink="/adeziune" expand="full">

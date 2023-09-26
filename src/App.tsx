@@ -49,11 +49,11 @@ const App: React.FC = () => (
           <Login />
         </Route>
         <Route component={Profil} path="/profil" />
-        <Route component={Adeziune} path="/adeziune" />
-        <Route component={Docs} path="/docs" />
-        <Route component={Home} path="/home" />
-        <Route component={Plata} path="/plata" />
-        <Route component={Organigrama} path="/organigrama" />
+        <Route component={Adeziune} path="/adeziune/" />
+        <Route component={Docs} path="/docs/" />
+        <Route component={Home} path="/home/" />
+        <Route component={Plata} path="/plata/" />
+        <Route path="/organigrama/:context/" component={Organigrama} />
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>

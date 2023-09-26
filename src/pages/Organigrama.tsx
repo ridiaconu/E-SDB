@@ -15,9 +15,11 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import React from "react";
+import { useParams } from "react-router-dom";
 
-const Organigrama: React.FC = (context) => {
-  context = "Local";
+const Organigrama: React.FC = () => {
+  const { context } = useParams<{ context: string }>();
+
   switch (context) {
     case "Central":
       return (

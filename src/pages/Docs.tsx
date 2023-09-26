@@ -16,43 +16,121 @@ import {
   IonCol,
 } from "@ionic/react";
 
-const Docs = () => {
-  return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Docs</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-        <IonCard>
-          <IonCardHeader>
-            <IonCardTitle className="ion-text-center">
-              Organigrama SDB
-            </IonCardTitle>
-            <IonRow className="ion-align-items-stretch">
-              <IonCol className="ion-text-center">
-                <IonButton>Local</IonButton>
-              </IonCol>
-              <IonCol className="ion-text-center">
-                <IonButton>Judetean</IonButton>
-              </IonCol>
-              <IonCol className="ion-text-center">
-                <IonButton routerLink="/organigrama">Central</IonButton>
-              </IonCol>
-            </IonRow>
-          </IonCardHeader>
-        </IonCard>
+const Docs: React.FC<{ isMember: boolean }> = ({ isMember }) => {
+  switch (isMember) {
+    case true:
+      return (
+        <IonPage>
+          <IonHeader>
+            <IonToolbar>
+              <IonTitle>Docs</IonTitle>
+            </IonToolbar>
+          </IonHeader>
+          <IonContent>
+            <IonCard>
+              <IonCardHeader>
+                <IonCardTitle className="ion-text-center">
+                  Organigrama SDB
+                </IonCardTitle>
+                <IonRow className="ion-align-items-stretch">
+                  <IonCol className="ion-text-center">
+                    <IonButton routerLink="/organigrama/Local">Local</IonButton>
+                  </IonCol>
+                  <IonCol className="ion-text-center">
+                    <IonButton routerLink="/organigrama/Judetean">
+                      Judetean
+                    </IonButton>
+                  </IonCol>
+                  <IonCol className="ion-text-center">
+                    <IonButton routerLink="/organigrama/Central">
+                      Central
+                    </IonButton>
+                  </IonCol>
+                </IonRow>
+              </IonCardHeader>
+            </IonCard>
 
-        <IonCard>
-          <IonCardHeader>
-            <IonCardTitle className="ion-text-center">Statut SDB</IonCardTitle>
-            <IonButton>Citeste aici</IonButton>
-          </IonCardHeader>
-        </IonCard>
-      </IonContent>
-    </IonPage>
-  );
+            <IonCard>
+              <IonCardHeader>
+                <IonCardTitle className="ion-text-center">
+                  Statut SDB
+                </IonCardTitle>
+                <IonButton>Citeste aici</IonButton>
+              </IonCardHeader>
+            </IonCard>
+
+            <IonCard>
+              <IonCardHeader>
+                <IonCardTitle className="ion-text-center">
+                  Documente SDB
+                </IonCardTitle>
+                <IonRow className="ion-align-items-stretch">
+                  <IonCol className="ion-text-center">
+                    <IonButton routerLink="/organigrama/Local">Local</IonButton>
+                  </IonCol>
+                  <IonCol className="ion-text-center">
+                    <IonButton routerLink="/organigrama/Judetean">
+                      Judetean
+                    </IonButton>
+                  </IonCol>
+                  <IonCol className="ion-text-center">
+                    <IonButton routerLink="/organigrama/Central">
+                      Central
+                    </IonButton>
+                  </IonCol>
+                </IonRow>
+              </IonCardHeader>
+            </IonCard>
+          </IonContent>
+        </IonPage>
+      );
+      break;
+
+    case false:
+      return (
+        <IonPage>
+          <IonHeader>
+            <IonToolbar>
+              <IonTitle>Docs</IonTitle>
+            </IonToolbar>
+          </IonHeader>
+          <IonContent>
+            <IonCard>
+              <IonCardHeader>
+                <IonCardTitle className="ion-text-center">
+                  Organigrama SDB
+                </IonCardTitle>
+                <IonRow className="ion-align-items-stretch">
+                  <IonCol className="ion-text-center">
+                    <IonButton routerLink="/organigrama/Local">Local</IonButton>
+                  </IonCol>
+                  <IonCol className="ion-text-center">
+                    <IonButton routerLink="/organigrama/Judetean">
+                      Judetean
+                    </IonButton>
+                  </IonCol>
+                  <IonCol className="ion-text-center">
+                    <IonButton routerLink="/organigrama/Central">
+                      Central
+                    </IonButton>
+                  </IonCol>
+                </IonRow>
+              </IonCardHeader>
+            </IonCard>
+
+            <IonCard>
+              <IonCardHeader>
+                <IonCardTitle className="ion-text-center">
+                  Statut SDB
+                </IonCardTitle>
+                <IonButton>Citeste aici</IonButton>
+              </IonCardHeader>
+            </IonCard>
+          </IonContent>
+        </IonPage>
+      );
+      break;
+  }
 };
 
 export default Docs;
