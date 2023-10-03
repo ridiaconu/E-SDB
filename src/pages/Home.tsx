@@ -32,7 +32,7 @@ import Plata from "./Plata";
 const isMemberContext = createContext<boolean>(false);
 
 const Home: React.FC = () => {
-  let isMember = false;
+  let isMember = true;
   return (
     <isMemberContext.Provider value={isMember}>
       <IonTabs>

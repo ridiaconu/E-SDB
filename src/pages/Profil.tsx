@@ -24,13 +24,9 @@ const Profil = () => {
           <div color="primary">
             <h1 className="ion-text-center">Radu Diaconu</h1>
           </div>
-
           <h2 className="ion-text-center ion-margin-top">Setari cont</h2>
           <IonButton className="ion-padding-top" expand="block">
             Schimba parola
-          </IonButton>
-          <IonButton className="ion-padding-top" expand="block">
-            Editeaza profilul
           </IonButton>
           <IonButton
             routerLink="/docs"
