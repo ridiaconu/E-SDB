@@ -13,7 +13,12 @@ import {
 } from "@ionic/react";
 import { logoGoogle } from "ionicons/icons";
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
 import { useHistory } from "react-router";
 
 const firebaseConfig = {
@@ -34,6 +39,21 @@ const Login: React.FC = () => {
 
   const auth = getAuth();
   const history = useHistory(); // Initialize useHistory
+
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+
+    try {
+      const userCredential = await signInWithPopup(auth, provider);
+      // Signed in with Google
+      const user = userCredential.user;
+      console.log("User signed in with Google:", user);
+      history.push("/home/avizier");
+    } catch (error) {
+      // Handle errors
+      console.error("Error signing in with Google:", error);
+    }
+  };
 
   const doLogin = (event: React.FormEvent) => {
     event.preventDefault();
@@ -82,16 +102,16 @@ const Login: React.FC = () => {
               <IonButton type="submit" className="ion-margin-top" expand="full">
                 Login
               </IonButton>
-              <IonButton
-                routerLink="/profil"
-                type="button"
-                className="ion-margin-top"
-                expand="full"
-              >
-                Login cu Google
-                <IonIcon icon={logoGoogle} slot="star" />
-              </IonButton>
             </form>
+            <IonButton
+              type="button"
+              className="ion-margin-top"
+              expand="full"
+              onClick={signInWithGoogle}
+            >
+              Login cu Google
+              <IonIcon icon={logoGoogle} slot="start" />
+            </IonButton>
           </IonCardContent>
         </IonCard>
       </IonContent>
