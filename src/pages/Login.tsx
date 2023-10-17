@@ -12,7 +12,6 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { logoGoogle } from "ionicons/icons";
-import { initializeApp } from "firebase/app";
 import {
   GoogleAuthProvider,
   getAuth,
@@ -20,18 +19,16 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { useHistory } from "react-router";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyD4FNczbTvmEg_84IB3OdC61dSvjeKRSYI",
-  authDomain: "e-sdb-739c9.firebaseapp.com",
-  projectId: "e-sdb-739c9",
-  storageBucket: "e-sdb-739c9.appspot.com",
-  messagingSenderId: "668871241198",
-  appId: "1:668871241198:web:4aa2cd1a908e059b1d72ff",
-  measurementId: "G-DNGK4D0Q9V",
-};
-
-const app = initializeApp(firebaseConfig);
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  getDoc,
+  setDoc,
+} from "firebase/firestore";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -39,6 +36,32 @@ const Login: React.FC = () => {
 
   const auth = getAuth();
   const history = useHistory(); // Initialize useHistory
+  const db = getFirestore();
+
+  const checkUserDocument = async () => {
+    // Get the current user's UID
+    const user = auth.currentUser;
+    const uid = user ? user.uid : null;
+
+    if (uid) {
+      const docref = doc(db, "users", uid);
+
+      const docSnap = await getDoc(docref);
+
+      const colref = collection(db, "users");
+
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+      } else {
+        // docSnap.data() will be undefined in this case
+        await setDoc(doc(colref, uid), {
+          isMember: false,
+          memberId: "",
+        });
+        console.log("User has been created");
+      }
+    }
+  };
 
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
@@ -48,6 +71,7 @@ const Login: React.FC = () => {
       // Signed in with Google
       const user = userCredential.user;
       console.log("User signed in with Google:", user);
+      checkUserDocument();
       history.push("/home/avizier");
     } catch (error) {
       // Handle errors

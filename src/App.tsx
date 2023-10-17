@@ -38,6 +38,9 @@ import Docs from "./pages/Docs";
 import Home from "./pages/Home";
 import Organigrama from "./pages/Organigrama";
 import Plata from "./pages/Plata";
+import { firebaseConfig } from "./firebase";
+import { initializeApp } from "firebase/app";
+const ref = initializeApp(firebaseConfig);
 
 setupIonicReact();
 
