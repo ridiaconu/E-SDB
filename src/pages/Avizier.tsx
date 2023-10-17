@@ -75,10 +75,9 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
 
           <IonContent className="ion-padding">
             <IonCard>
-              <IonCardTitle>Bun venit Radu</IonCardTitle>
+              <IonCardTitle>Bun venit</IonCardTitle>
               <IonCardContent>
-                <div>Esti nembru in filiala Craiova</div>
-                <div>Situatia cotizatiei: Achitat la zi</div>
+                <div>Nu esti inca membru SDB</div>
                 <IonButton routerLink="/plata/" expand="full">
                   Doneaza SDB
                 </IonButton>
