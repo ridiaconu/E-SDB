@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">e-sdb</string>
-    <string name="title_activity_main">e-sdb</string>
+    <string name="app_name">E-SDB</string>
+    <string name="title_activity_main">E-SDB</string>
     <string name="package_name">e.sdb</string>
     <string name="custom_url_scheme">e.sdb</string>
 </resources>

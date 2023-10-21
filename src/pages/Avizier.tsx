@@ -9,6 +9,14 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
+import { getAuth } from "firebase/auth";
+import {
+  collection,
+  doc,
+  getDoc,
+  getFirestore,
+  setDoc,
+} from "firebase/firestore";
 import React from "react";
 
 const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {

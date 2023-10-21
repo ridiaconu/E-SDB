@@ -21,6 +21,7 @@ const Profil = () => {
       signOut(auth);
       console.log("Logout successful");
       history.push("/");
+      document.location.reload();
     } catch {
       console.log("ERR");
     }

@@ -22,17 +22,65 @@ import {
   document,
   personCircle,
 } from "ionicons/icons";
-import React, { createContext } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import Avizier from "./Avizier";
 import { Route } from "react-router";
 import Docs from "./Docs";
 import Profil from "./Profil";
 import Plata from "./Plata";
+import { getAuth } from "firebase/auth";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  collection,
+  setDoc,
+} from "firebase/firestore";
 
 const isMemberContext = createContext<boolean>(false);
 
 const Home: React.FC = () => {
-  let isMember = true;
+  const [isMember, setIsMember] = useState<boolean>(false);
+
+  async function getMemberStatus(): Promise<boolean> {
+    const auth = getAuth();
+    const db = getFirestore();
+
+    const user = auth.currentUser;
+    const uid = user ? user.uid : null;
+    let memberStatus: boolean;
+
+    if (uid) {
+      const docref = doc(db, "users", uid);
+
+      const docSnap = await getDoc(docref);
+
+      if (docSnap.exists()) {
+        memberStatus = docSnap.data().isMember;
+        if (memberStatus == true) {
+          console.log("membru");
+          return true;
+        } else {
+          console.log("numembu");
+          return false;
+        }
+      } else {
+        console.log("User has been created");
+        return false;
+      }
+    } else {
+      console.log("user does not exist");
+      return false;
+    }
+  }
+
+  useEffect(() => {
+    async function fetchMemberStatus() {
+      const memberStatus = await getMemberStatus();
+      setIsMember(memberStatus);
+    }
+    fetchMemberStatus();
+  }, []);
   return (
     <isMemberContext.Provider value={isMember}>
       <IonTabs>
