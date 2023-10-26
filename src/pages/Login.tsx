@@ -14,6 +14,8 @@ import {
 import { logoGoogle } from "ionicons/icons";
 import {
   GoogleAuthProvider,
+  browserLocalPersistence,
+  browserSessionPersistence,
   getAuth,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -28,6 +30,7 @@ import {
   doc,
   getDoc,
   setDoc,
+  persistentLocalCache,
 } from "firebase/firestore";
 
 const Login: React.FC = () => {
@@ -37,6 +40,7 @@ const Login: React.FC = () => {
   const auth = getAuth();
   const history = useHistory(); // Initialize useHistory
   const db = getFirestore();
+  auth.setPersistence(browserLocalPersistence);
 
   const checkUserDocument = async () => {
     // Get the current user's UID
@@ -56,7 +60,6 @@ const Login: React.FC = () => {
         // docSnap.data() will be undefined in this case
         await setDoc(doc(colref, uid), {
           isMember: false,
-          memberId: "",
         });
         console.log("User has been created");
       }
@@ -87,6 +90,7 @@ const Login: React.FC = () => {
         // Signed in
         const user = userCredential.user;
         console.log("User signed in:", user);
+
         history.push("/home/avizier");
       })
       .catch((error) => {

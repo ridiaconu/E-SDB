@@ -40,8 +40,12 @@ import Organigrama from "./pages/Organigrama";
 import Plata from "./pages/Plata";
 import { firebaseConfig } from "./firebase";
 import { initializeApp } from "firebase/app";
+import {
+  browserSessionPersistence,
+  initializeAuth,
+  Persistence,
+} from "firebase/auth";
 const ref = initializeApp(firebaseConfig);
-
 setupIonicReact();
 
 const App: React.FC = () => (

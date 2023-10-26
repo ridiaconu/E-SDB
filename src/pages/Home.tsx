@@ -28,7 +28,7 @@ import { Route } from "react-router";
 import Docs from "./Docs";
 import Profil from "./Profil";
 import Plata from "./Plata";
-import { getAuth } from "firebase/auth";
+import { browserLocalPersistence, getAuth } from "firebase/auth";
 import {
   getFirestore,
   doc,
