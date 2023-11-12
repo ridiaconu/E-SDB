@@ -60,6 +60,7 @@ const Login: React.FC = () => {
         // docSnap.data() will be undefined in this case
         await setDoc(doc(colref, uid), {
           isMember: false,
+          isAdmin: false,
         });
         console.log("User has been created");
       }

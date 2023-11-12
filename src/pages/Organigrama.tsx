@@ -10,6 +10,8 @@ import {
   IonLabel,
   IonList,
   IonPage,
+  IonSelect,
+  IonSelectOption,
   IonThumbnail,
   IonTitle,
   IonToolbar,
@@ -93,6 +95,16 @@ const Organigrama: React.FC = () => {
             </IonToolbar>
           </IonHeader>
           <IonContent className="ion-padding">
+            <IonList>
+              <IonItem>
+                <IonSelect interface="action-sheet" placeholder="Select fruit">
+                  <IonSelectOption value="apples">Apples</IonSelectOption>
+                  <IonSelectOption value="oranges">Oranges</IonSelectOption>
+                  <IonSelectOption value="bananas">Bananas</IonSelectOption>
+                </IonSelect>
+              </IonItem>
+            </IonList>
+
             <IonCard>
               <img
                 alt="Silhouette of mountains"
@@ -156,6 +168,16 @@ const Organigrama: React.FC = () => {
             </IonToolbar>
           </IonHeader>
           <IonContent className="ion-padding">
+            <IonList>
+              <IonItem>
+                <IonSelect interface="action-sheet" placeholder="Select fruit">
+                  <IonSelectOption value="apples">Apples</IonSelectOption>
+                  <IonSelectOption value="oranges">Oranges</IonSelectOption>
+                  <IonSelectOption value="bananas">Bananas</IonSelectOption>
+                </IonSelect>
+              </IonItem>
+            </IonList>
+
             <IonCard>
               <img
                 alt="Silhouette of mountains"

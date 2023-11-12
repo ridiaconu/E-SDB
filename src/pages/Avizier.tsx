@@ -3,9 +3,16 @@ import {
   IonCard,
   IonCardContent,
   IonCardTitle,
+  IonCol,
   IonContent,
+  IonGrid,
   IonHeader,
+  IonItem,
+  IonList,
   IonPage,
+  IonRow,
+  IonSelect,
+  IonSelectOption,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -14,10 +21,14 @@ import {
   DocumentSnapshot,
   QueryDocumentSnapshot,
   collection,
+  collectionGroup,
   doc,
   getDoc,
+  getDocs,
   getFirestore,
+  query,
   setDoc,
+  where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 
@@ -63,44 +74,16 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
       return undefined;
     }
   }
-  const [filiala, setFiliala] = useState<QueryDocumentSnapshot | undefined>(
-    undefined
-  );
-  useEffect(() => {
-    async function fetchFiliala() {
-      const data = await getFiliala(memberData?.data().filialaLocala);
-      setFiliala(data);
-    }
-    fetchFiliala();
-  }, []);
-  async function getFiliala(
-    codFiliala: string
-  ): Promise<QueryDocumentSnapshot | undefined> {
-    const db = getFirestore();
 
-    const docRef = doc(db, "filiale-locale", codFiliala);
-
-    try {
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        console.log("Filiala data:", docSnap.data());
-        return docSnap;
-      } else {
-        console.log("Filiala does not exist");
-        return undefined;
-      }
-    } catch (error) {
-      console.error("Error getting filiala data:", error);
-      throw error;
-    }
-  }
   switch (isMember) {
     case true:
       if (memberData) {
         const prenume = memberData.data()?.nume?.prenume;
         const nivelCotizatie = memberData.data()?.nivelCotizatie;
-        const filialaLocala = filiala?.data()?.Localitate;
+        let filialaloc = memberData.data()?.filialaLocala;
+
+        // let filialaloc = getFilialaLocalaData(memberData.data()?.filialaLocala);
+
         return (
           <IonPage>
             <IonHeader>
@@ -113,7 +96,7 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
               <IonCard>
                 <IonCardTitle>Bun venit {prenume}</IonCardTitle>
                 <IonCardContent>
-                  <div>Esti nembru in filiala {filialaLocala}</div>
+                  <div>Esti membru in filiala {filialaloc}</div>
                   <div>
                     Situatia cotizatiei:{" "}
                     {nivelCotizatie < 0
@@ -127,8 +110,54 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
                   </IonButton>
                 </IonCardContent>
               </IonCard>
+              <IonGrid>
+                <IonRow>
+                  <IonCol>
+                    <IonItem>
+                      <IonList>
+                        <IonItem>
+                          <IonSelect
+                            aria-label="Judet"
+                            interface="action-sheet"
+                            placeholder="Judet"
+                          >
+                            <IonSelectOption value="DJ">Dolj</IonSelectOption>
+                            <IonSelectOption value="GJ">Gorj</IonSelectOption>
+                            <IonSelectOption value="VL">Valcea</IonSelectOption>
+                          </IonSelect>
+                        </IonItem>
+                      </IonList>
+                    </IonItem>
+                  </IonCol>
+                  <IonCol>
+                    <IonItem>
+                      {" "}
+                      <IonList>
+                        <IonItem>
+                          <IonSelect
+                            aria-label="Oras"
+                            interface="action-sheet"
+                            placeholder="Oras"
+                          >
+                            <IonSelectOption value="DJ">
+                              Craiova
+                            </IonSelectOption>
+                            <IonSelectOption value="GJ">
+                              Targu Jiu
+                            </IonSelectOption>
+                            <IonSelectOption value="VL">
+                              Ramnicu Valcea
+                            </IonSelectOption>
+                          </IonSelect>
+                        </IonItem>
+                      </IonList>
+                    </IonItem>
+                  </IonCol>
+                </IonRow>
+              </IonGrid>
               <IonCard>
                 <IonCardTitle>Avizier Central</IonCardTitle>
+
                 <IonCardContent>
                   <div>🔴Reprezentarea femeilor in politica</div>
                   <div>🔴Pozitia SDB legata de deficitul bugetar</div>
@@ -213,3 +242,6 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
 };
 
 export default Avizier;
+function value(value: String): String | PromiseLike<String> {
+  throw new Error("Function not implemented.");
+}
