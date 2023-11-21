@@ -16,8 +16,9 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import {
+  DocumentData,
   DocumentSnapshot,
   QueryDocumentSnapshot,
   collection,
@@ -36,6 +37,11 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
   const [memberData, setMemberData] = useState<
     QueryDocumentSnapshot | undefined
   >(undefined); // Use state to store the member data
+  const [anunturiCentral, setAnunturiCentral] = useState<
+    Array<String> | undefined
+  >(undefined);
+
+  const db = getFirestore();
 
   useEffect(() => {
     async function fetchMemberData() {
@@ -46,10 +52,18 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
     fetchMemberData();
   }, []); // Call the function when the component mounts
 
+  useEffect(() => {
+    async function fetchAnunturiCentral() {
+      const anunturi = await getAnunturi("Central");
+      setAnunturiCentral(anunturi);
+    }
+
+    fetchAnunturiCentral();
+  }, []);
+
   async function getMemberData(): Promise<QueryDocumentSnapshot | undefined> {
-    const db = getFirestore();
     const auth = getAuth();
-    const user = auth.currentUser;
+    let user = auth.currentUser;
 
     if (user) {
       const uid = user.uid;
@@ -75,15 +89,38 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
     }
   }
 
+  async function getAnunturi(filiala: String): Promise<String[] | undefined> {
+    const colRef = collection(db, "filiale/" + filiala + "/anunturi");
+    try {
+      const colSnap = await getDocs(colRef);
+      const titles = [];
+
+      for (const doc of colSnap.docs) {
+        if (doc.data()?.isInternal == true) {
+          let titlu = doc.data()?.titlu;
+          titlu = "🟣" + titlu;
+          titles.push(titlu);
+        } else {
+          let titlu = doc.data()?.titlu;
+          titlu = "🔴" + titlu;
+          titles.push(titlu);
+        }
+      }
+
+      return titles;
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
+  }
+
   switch (isMember) {
     case true:
       if (memberData) {
         const prenume = memberData.data()?.nume?.prenume;
         const nivelCotizatie = memberData.data()?.nivelCotizatie;
         let filialaloc = memberData.data()?.filialaLocala;
-
-        // let filialaloc = getFilialaLocalaData(memberData.data()?.filialaLocala);
-
+        const firstThreeAnunturiCentral = anunturiCentral?.slice(0, 3);
         return (
           <IonPage>
             <IonHeader>
@@ -157,11 +194,10 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
               </IonGrid>
               <IonCard>
                 <IonCardTitle>Avizier Central</IonCardTitle>
-
                 <IonCardContent>
-                  <div>🔴Reprezentarea femeilor in politica</div>
-                  <div>🔴Pozitia SDB legata de deficitul bugetar</div>
-                  <div>🟣Hai la teambuilding</div>
+                  {anunturiCentral?.slice(0, 3).map((anunt, index) => (
+                    <div key={index}>{anunt}</div>
+                  ))}
                   <IonButton expand="full">Vezi toate mesajele</IonButton>
                 </IonCardContent>
               </IonCard>
@@ -214,8 +250,11 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
             <IonCard>
               <IonCardTitle>Avizier Central</IonCardTitle>
               <IonCardContent>
-                <div>🔴Reprezentarea femeilor in politica</div>
-                <div>🔴Pozitia SDB legata de deficitul bugetar</div>
+                {anunturiCentral
+                  ?.filter((anunt) => anunt.startsWith("🔴"))
+                  .map((anunt, index) => (
+                    <div key={index}>{anunt}</div>
+                  ))}
                 <IonButton expand="full">Vezi toate mesajele</IonButton>
               </IonCardContent>
             </IonCard>
@@ -242,6 +281,3 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
 };
 
 export default Avizier;
-function value(value: String): String | PromiseLike<String> {
-  throw new Error("Function not implemented.");
-}
