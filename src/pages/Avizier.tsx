@@ -40,8 +40,21 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
   const [anunturiCentral, setAnunturiCentral] = useState<
     Array<String> | undefined
   >(undefined);
+  const [anunturiJudetean, setAnunturiJudetean] = useState<
+    Array<String> | undefined
+  >(undefined);
+  const [anunturiLocal, setAnunturiLocal] = useState<Array<String> | undefined>(
+    undefined
+  );
+  const [filialeJudetene, setFilialeJudetene] = useState<
+    Array<String> | undefined
+  >(undefined);
+  const [filialeLocale, setFilialeLocale] = useState<Array<String> | undefined>(
+    undefined
+  );
 
   const db = getFirestore();
+  const auth = getAuth();
 
   useEffect(() => {
     async function fetchMemberData() {
@@ -50,7 +63,7 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
     }
 
     fetchMemberData();
-  }, []); // Call the function when the component mounts
+  }, []);
 
   useEffect(() => {
     async function fetchAnunturiCentral() {
@@ -60,9 +73,52 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
 
     fetchAnunturiCentral();
   }, []);
+  useEffect(() => {
+    async function fetchAnunturiJudetean() {
+      if (memberData) {
+        const anunturi = await getAnunturi(memberData.data()?.filialaJudeteana);
+        setAnunturiJudetean(anunturi);
+      } else {
+        const anunturi = await getAnunturi("Dolj");
+        setAnunturiJudetean(anunturi);
+      }
+    }
+
+    fetchAnunturiJudetean();
+  }, []);
+  useEffect(() => {
+    async function fetchAnunturiLocal() {
+      if (memberData) {
+        const anunturi = await getAnunturi(memberData.data()?.filialaLocala);
+        setAnunturiLocal(anunturi);
+      } else {
+        const anunturi = await getAnunturi("Craiova");
+        setAnunturiLocal(anunturi);
+      }
+    }
+
+    fetchAnunturiLocal();
+  }, []);
+
+  useEffect(() => {
+    async function fetchFilialeJudetene() {
+      const data = await getFilialeJudetene();
+      setFilialeJudetene(data); // Update the state with the member data
+    }
+
+    fetchFilialeJudetene();
+  }, []);
+
+  useEffect(() => {
+    async function fetchFilialeLocale() {
+      const data = await getFilialeLocale();
+      setFilialeLocale(data); // Update the state with the member data
+    }
+
+    fetchFilialeLocale();
+  }, []);
 
   async function getMemberData(): Promise<QueryDocumentSnapshot | undefined> {
-    const auth = getAuth();
     let user = auth.currentUser;
 
     if (user) {
@@ -114,13 +170,46 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
     }
   }
 
+  async function getFilialeJudetene(): Promise<String[] | undefined> {
+    const colRef = collection(db, "filiale");
+    try {
+      const colSnap = await getDocs(colRef);
+      const filialeJudetene = [];
+      for (const doc of colSnap.docs) {
+        if (doc.data()?.context == "judetean") {
+          filialeJudetene.push(doc.id);
+        }
+      }
+      return filialeJudetene;
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
+  }
+
+  async function getFilialeLocale(): Promise<String[] | undefined> {
+    const colRef = collection(db, "filiale");
+    try {
+      const colSnap = await getDocs(colRef);
+      const filialeLocale = [];
+      for (const doc of colSnap.docs) {
+        if (doc.data()?.context == "local") {
+          filialeLocale.push(doc.id);
+        }
+      }
+      return filialeLocale;
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
+  }
+
   switch (isMember) {
     case true:
       if (memberData) {
         const prenume = memberData.data()?.nume?.prenume;
         const nivelCotizatie = memberData.data()?.nivelCotizatie;
         let filialaloc = memberData.data()?.filialaLocala;
-        const firstThreeAnunturiCentral = anunturiCentral?.slice(0, 3);
         return (
           <IonPage>
             <IonHeader>
@@ -157,10 +246,15 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
                             aria-label="Judet"
                             interface="action-sheet"
                             placeholder="Judet"
+                            value={memberData.data()?.filialaJudeteana || ""}
+                            onIonChange={(e) => getAnunturi(e.detail.value)}
                           >
-                            <IonSelectOption value="DJ">Dolj</IonSelectOption>
-                            <IonSelectOption value="GJ">Gorj</IonSelectOption>
-                            <IonSelectOption value="VL">Valcea</IonSelectOption>
+                            {filialeJudetene &&
+                              filialeJudetene.map((filiala, index) => (
+                                <IonSelectOption key={index} value={filiala}>
+                                  {filiala}
+                                </IonSelectOption>
+                              ))}
                           </IonSelect>
                         </IonItem>
                       </IonList>
@@ -175,16 +269,15 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
                             aria-label="Oras"
                             interface="action-sheet"
                             placeholder="Oras"
+                            value={memberData.data()?.filialaLocala || ""}
+                            onIonChange={(e) => getAnunturi(e.detail.value)}
                           >
-                            <IonSelectOption value="DJ">
-                              Craiova
-                            </IonSelectOption>
-                            <IonSelectOption value="GJ">
-                              Targu Jiu
-                            </IonSelectOption>
-                            <IonSelectOption value="VL">
-                              Ramnicu Valcea
-                            </IonSelectOption>
+                            {filialeLocale &&
+                              filialeLocale.map((filiala, index) => (
+                                <IonSelectOption key={index} value={filiala}>
+                                  {filiala}
+                                </IonSelectOption>
+                              ))}
                           </IonSelect>
                         </IonItem>
                       </IonList>
@@ -236,7 +329,9 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
 
           <IonContent className="ion-padding">
             <IonCard>
-              <IonCardTitle>Bun venit</IonCardTitle>
+              <IonCardTitle>
+                Bun venit {auth.currentUser?.displayName}
+              </IonCardTitle>
               <IonCardContent>
                 <div>Nu esti inca membru SDB</div>
                 <IonButton routerLink="/plata/" expand="full">

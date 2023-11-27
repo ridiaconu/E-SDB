@@ -13,7 +13,7 @@ import {
 import { getAuth, sendPasswordResetEmail, signOut } from "firebase/auth";
 import { useHistory } from "react-router";
 
-const Profil = () => {
+const Profil: React.FC<{ isMember: boolean }> = ({ isMember }) => {
   const auth = getAuth();
   const history = useHistory(); // Initialize useHistory
   const Logout = () => {
@@ -47,44 +47,85 @@ const Profil = () => {
       console.error("Error:", error);
     }
   };
-  return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Profil</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-        <div className="ion-padding">
-          <div color="primary">
-            <h1 className="ion-text-center">Radu Diaconu</h1>
-          </div>
-          <h2 className="ion-text-center ion-margin-top">Setari cont</h2>
-          <IonButton
-            className="ion-padding-top"
-            expand="block"
-            onClick={ChangePassword}
-          >
-            Schimba parola
-          </IonButton>
-          <IonButton
-            routerLink="/docs"
-            className="ion-padding-top"
-            expand="block"
-          >
-            Grupuri tematice
-          </IonButton>
-          <IonButton
-            className="ion-padding-top"
-            expand="block"
-            onClick={Logout}
-          >
-            Logout
-          </IonButton>
-        </div>
-      </IonContent>
-    </IonPage>
-  );
+
+  switch (isMember) {
+    case true:
+      return (
+        <IonPage>
+          <IonHeader>
+            <IonToolbar>
+              <IonTitle>Profil</IonTitle>
+            </IonToolbar>
+          </IonHeader>
+          <IonContent>
+            <div className="ion-padding">
+              <div color="primary">
+                <h1 className="ion-text-center">
+                  {auth.currentUser?.displayName}
+                </h1>
+              </div>
+              <h2 className="ion-text-center ion-margin-top">Setari cont</h2>
+              <IonButton
+                className="ion-padding-top"
+                expand="block"
+                onClick={ChangePassword}
+              >
+                Schimba parola
+              </IonButton>
+              <IonButton
+                routerLink="/docs"
+                className="ion-padding-top"
+                expand="block"
+              >
+                Grupuri tematice
+              </IonButton>
+              <IonButton
+                className="ion-padding-top"
+                expand="block"
+                onClick={Logout}
+              >
+                Logout
+              </IonButton>
+            </div>
+          </IonContent>
+        </IonPage>
+      );
+    case false:
+      return (
+        <IonPage>
+          <IonHeader>
+            <IonToolbar>
+              <IonTitle>Profil</IonTitle>
+            </IonToolbar>
+          </IonHeader>
+          <IonContent>
+            <div className="ion-padding">
+              <div color="primary">
+                <h1 className="ion-text-center">
+                  {auth.currentUser?.displayName}
+                </h1>
+              </div>
+              <h2 className="ion-text-center ion-margin-top">Setari cont</h2>
+              <IonButton
+                className="ion-padding-top"
+                expand="block"
+                onClick={ChangePassword}
+              >
+                Schimba parola
+              </IonButton>
+
+              <IonButton
+                className="ion-padding-top"
+                expand="block"
+                onClick={Logout}
+              >
+                Logout
+              </IonButton>
+            </div>
+          </IonContent>
+        </IonPage>
+      );
+  }
 };
 
 export default Profil;

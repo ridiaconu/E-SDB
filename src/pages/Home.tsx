@@ -28,7 +28,12 @@ import { Route } from "react-router";
 import Docs from "./Docs";
 import Profil from "./Profil";
 import Plata from "./Plata";
-import { browserLocalPersistence, getAuth } from "firebase/auth";
+import {
+  browserLocalPersistence,
+  browserSessionPersistence,
+  getAuth,
+  setPersistence,
+} from "firebase/auth";
 import {
   getFirestore,
   doc,
@@ -40,10 +45,11 @@ import {
 const isMemberContext = createContext<boolean>(false);
 
 const Home: React.FC = () => {
+  const auth = getAuth();
+  auth.setPersistence(browserLocalPersistence);
   const [isMember, setIsMember] = useState<boolean>(false);
 
   async function getMemberStatus(): Promise<boolean> {
-    const auth = getAuth();
     const db = getFirestore();
 
     const user = auth.currentUser;
@@ -91,7 +97,9 @@ const Home: React.FC = () => {
           <Route path="/home/docs">
             <Docs isMember={isMember} />
           </Route>
-          <Route path="/home/profil" component={Profil}></Route>
+          <Route path="/home/profil">
+            <Profil isMember={isMember} />
+          </Route>
           <Route path="/plata/">
             <Plata isMember={isMember}></Plata>
           </Route>
