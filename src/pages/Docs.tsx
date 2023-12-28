@@ -75,7 +75,7 @@ const Docs: React.FC<{ isMember: boolean }> = ({ isMember }) => {
                   </IonCol>
                   <IonCol className="ion-text-center">
                     <IonButton routerLink="/organigrama/Central">
-                      Central
+                      National
                     </IonButton>
                   </IonCol>
                 </IonRow>
@@ -111,7 +111,7 @@ const Docs: React.FC<{ isMember: boolean }> = ({ isMember }) => {
                   </IonCol>
                   <IonCol className="ion-text-center">
                     <IonButton routerLink="/organigrama/Central">
-                      Central
+                      National
                     </IonButton>
                   </IonCol>
                 </IonRow>

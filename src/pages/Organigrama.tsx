@@ -19,6 +19,10 @@ import {
 import React from "react";
 import { useParams } from "react-router-dom";
 
+import { db } from "../firebase";
+
+let fireDB = db;
+
 const Organigrama: React.FC = () => {
   const { context } = useParams<{ context: string }>();
 

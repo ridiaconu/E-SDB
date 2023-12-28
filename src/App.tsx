@@ -1,17 +1,6 @@
-import { Redirect, Route } from "react-router-dom";
-import {
-  IonApp,
-  IonIcon,
-  IonLabel,
-  IonRoute,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  setupIonicReact,
-} from "@ionic/react";
+import { Route } from "react-router-dom";
+import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { ellipse, square, triangle } from "ionicons/icons";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -31,6 +20,7 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
+
 import Login from "./pages/Login";
 import Profil from "./pages/Profil";
 import Adeziune from "./pages/Adeziune";
@@ -38,14 +28,9 @@ import Docs from "./pages/Docs";
 import Home from "./pages/Home";
 import Organigrama from "./pages/Organigrama";
 import Plata from "./pages/Plata";
-import { firebaseConfig } from "./firebase";
-import { initializeApp } from "firebase/app";
-import {
-  browserSessionPersistence,
-  initializeAuth,
-  Persistence,
-} from "firebase/auth";
-const ref = initializeApp(firebaseConfig);
+
+import "./firebase";
+
 setupIonicReact();
 
 const App: React.FC = () => (

@@ -42,15 +42,17 @@ import {
   setDoc,
 } from "firebase/firestore";
 
+import { auth, db } from "../firebase";
+
 const isMemberContext = createContext<boolean>(false);
 
 const Home: React.FC = () => {
-  const auth = getAuth();
+  const fireAuth = auth;
   auth.setPersistence(browserLocalPersistence);
   const [isMember, setIsMember] = useState<boolean>(false);
 
   async function getMemberStatus(): Promise<boolean> {
-    const db = getFirestore();
+    const fireDb = db;
 
     const user = auth.currentUser;
     const uid = user ? user.uid : null;

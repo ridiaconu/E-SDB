@@ -10,11 +10,12 @@ import {
   IonLabel,
   IonButton,
 } from "@ionic/react";
-import { getAuth, sendPasswordResetEmail, signOut } from "firebase/auth";
+import { sendPasswordResetEmail, signOut } from "firebase/auth";
 import { useHistory } from "react-router";
+import { auth } from "../firebase";
 
 const Profil: React.FC<{ isMember: boolean }> = ({ isMember }) => {
-  const auth = getAuth();
+  const fireAuth = auth;
   const history = useHistory(); // Initialize useHistory
   const Logout = () => {
     try {

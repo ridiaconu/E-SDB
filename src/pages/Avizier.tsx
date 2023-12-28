@@ -16,7 +16,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import {
   DocumentData,
   DocumentSnapshot,
@@ -32,6 +32,7 @@ import {
   where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
+import { auth, db } from "../firebase";
 
 const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
   const [memberData, setMemberData] = useState<
@@ -53,8 +54,8 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
     undefined
   );
 
-  const db = getFirestore();
-  const auth = getAuth();
+  const fireDb = db;
+  const fireAuth = auth;
 
   useEffect(() => {
     async function fetchMemberData() {

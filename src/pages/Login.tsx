@@ -33,13 +33,15 @@ import {
   persistentLocalCache,
 } from "firebase/firestore";
 
+import { db, auth } from "../firebase";
+
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const auth = getAuth();
+  const fireAuth = auth;
   const history = useHistory(); // Initialize useHistory
-  const db = getFirestore();
+  const fireDb = db;
   auth.setPersistence(browserLocalPersistence);
 
   const checkUserDocument = async () => {
