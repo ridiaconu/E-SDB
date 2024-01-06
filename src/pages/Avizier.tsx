@@ -292,7 +292,9 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
                   {anunturiCentral?.slice(0, 3).map((anunt, index) => (
                     <div key={index}>{anunt}</div>
                   ))}
-                  <IonButton expand="full">Vezi toate mesajele</IonButton>
+                  <IonButton routerLink="/anunturi/" expand="full">
+                    Vezi toate mesajele
+                  </IonButton>
                 </IonCardContent>
               </IonCard>
               <IonCard>
@@ -351,7 +353,9 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
                   .map((anunt, index) => (
                     <div key={index}>{anunt}</div>
                   ))}
-                <IonButton expand="full">Vezi toate mesajele</IonButton>
+                <IonButton routerLink="/anunturi/" expand="full">
+                  Vezi toate mesajele
+                </IonButton>
               </IonCardContent>
             </IonCard>
             <IonCard>
