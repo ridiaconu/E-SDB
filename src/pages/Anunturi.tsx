@@ -280,17 +280,38 @@ const Anunturi: React.FC = () => {
 
           <IonContent className="ion-padding">
             {anunturiCentral
-              ?.filter((anunt) => anunt.data().isInternal === false)
+              ?.filter((anunt) => isMember || !anunt.data().isInternal)
               .map((anunt, index) => (
                 <IonCard key={index}>
-                  <IonCardTitle>🔴 {anunt.data().titlu}</IonCardTitle>
-
+                  <IonCardTitle>
+                    {anunt.data().isInternal ? "🟣 " : "🔴 "}
+                    {anunt.data().titlu}
+                  </IonCardTitle>
                   <IonCardContent>
                     <div>{anunt.data().content}</div>
-                    <IonButton routerLink="/plata/cotizatie" expand="full">
+                    <IonButton onClick={() => openModal(index)} expand="full">
                       Deschide anuntul
                     </IonButton>
                   </IonCardContent>
+                  <IonModal isOpen={openModalIndex === index}>
+                    {" "}
+                    <IonHeader>
+                      <IonToolbar>
+                        <IonTitle>
+                          {anunt.data().isInternal ? "🟣 " : "🔴 "}
+                          {anunt.data().titlu}
+                        </IonTitle>
+                        <IonButtons slot="end">
+                          <IonButton onClick={() => closeModal()}>
+                            Close
+                          </IonButton>
+                        </IonButtons>
+                      </IonToolbar>
+                    </IonHeader>
+                    <IonContent className="ion-padding">
+                      <div>{anunt.data().content}</div>
+                    </IonContent>
+                  </IonModal>
                 </IonCard>
               ))}
           </IonContent>
