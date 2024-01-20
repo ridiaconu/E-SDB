@@ -1,5 +1,6 @@
 import {
   IonButton,
+  IonButtons,
   IonCard,
   IonCardContent,
   IonCardTitle,
@@ -9,6 +10,7 @@ import {
   IonHeader,
   IonItem,
   IonList,
+  IonModal,
   IonPage,
   IonRow,
   IonSelect,
@@ -36,6 +38,7 @@ import { auth, db } from "../firebase";
 
 const Anunturi: React.FC = () => {
   let isMember: boolean;
+
   const [memberData, setMemberData] = useState<
     QueryDocumentSnapshot | undefined
   >(undefined); // Use state to store the member data
@@ -212,6 +215,11 @@ const Anunturi: React.FC = () => {
     isMember = true;
   }
 
+  const [openModalIndex, setOpenModalIndex] = useState<number | null>(null);
+
+  const openModal = (index: number | null) => setOpenModalIndex(index);
+  const closeModal = () => setOpenModalIndex(null);
+
   switch (isMember) {
     case true:
       return (
@@ -229,13 +237,31 @@ const Anunturi: React.FC = () => {
                   {anunt.data().isInternal ? "🟣 " : "🔴 "}
                   {anunt.data().titlu}
                 </IonCardTitle>
-
                 <IonCardContent>
                   <div>{anunt.data().content}</div>
-                  <IonButton routerLink="/plata/cotizatie" expand="full">
+                  <IonButton onClick={() => openModal(index)} expand="full">
                     Deschide anuntul
                   </IonButton>
                 </IonCardContent>
+                <IonModal isOpen={openModalIndex === index}>
+                  {" "}
+                  <IonHeader>
+                    <IonToolbar>
+                      <IonTitle>
+                        {anunt.data().isInternal ? "🟣 " : "🔴 "}
+                        {anunt.data().titlu}
+                      </IonTitle>
+                      <IonButtons slot="end">
+                        <IonButton onClick={() => closeModal()}>
+                          Close
+                        </IonButton>
+                      </IonButtons>
+                    </IonToolbar>
+                  </IonHeader>
+                  <IonContent className="ion-padding">
+                    <div>{anunt.data().content}</div>
+                  </IonContent>
+                </IonModal>
               </IonCard>
             ))}
           </IonContent>
