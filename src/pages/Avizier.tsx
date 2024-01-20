@@ -292,7 +292,7 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
                   {anunturiCentral?.slice(0, 3).map((anunt, index) => (
                     <div key={index}>{anunt}</div>
                   ))}
-                  <IonButton routerLink="/anunturi/" expand="full">
+                  <IonButton routerLink="/anunturi/Central" expand="full">
                     Vezi toate mesajele
                   </IonButton>
                 </IonCardContent>
@@ -300,19 +300,23 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
               <IonCard>
                 <IonCardTitle>Avizier Judetean</IonCardTitle>
                 <IonCardContent>
-                  <div>🟣Convocare sedinta Birou Judetean</div>
-                  <div>🔴Top 5 proiecte SDB in Dolj</div>
-                  <div>🔴Conferinta "Dolj la puterea 100"</div>
-                  <IonButton expand="full">Vezi toate mesajele</IonButton>
+                  {anunturiJudetean?.slice(0, 3).map((anunt, index) => (
+                    <div key={index}>{anunt}</div>
+                  ))}
+                  <IonButton routerLink="/anunturi/Judetean" expand="full">
+                    Vezi toate mesajele
+                  </IonButton>
                 </IonCardContent>
               </IonCard>
               <IonCard>
                 <IonCardTitle>Avizier Local</IonCardTitle>
                 <IonCardContent>
-                  <div>🟣Actiune "Vrem pietonala"</div>
-                  <div>🔴Pozitia SDB legata de festivalul Intencity</div>
-                  <div>🔴Hai sa ne cunosti - SDB Open Day</div>
-                  <IonButton expand="full">Vezi toate mesajele</IonButton>
+                  {anunturiLocal?.slice(0, 3).map((anunt, index) => (
+                    <div key={index}>{anunt}</div>
+                  ))}
+                  <IonButton routerLink="/anunturi/Local" expand="full">
+                    Vezi toate mesajele
+                  </IonButton>
                 </IonCardContent>
               </IonCard>
             </IonContent>
@@ -353,7 +357,7 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
                   .map((anunt, index) => (
                     <div key={index}>{anunt}</div>
                   ))}
-                <IonButton routerLink="/anunturi/" expand="full">
+                <IonButton routerLink="/anunturi/Central" expand="full">
                   Vezi toate mesajele
                 </IonButton>
               </IonCardContent>
@@ -361,17 +365,27 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
             <IonCard>
               <IonCardTitle>Avizier Judetean</IonCardTitle>
               <IonCardContent>
-                <div>🔴Top 5 proiecte SDB in Dolj</div>
-                <div>🔴Conferinta "Dolj la puterea 100"</div>
-                <IonButton expand="full">Vezi toate mesajele</IonButton>
+                {anunturiJudetean
+                  ?.filter((anunt) => anunt.startsWith("🔴"))
+                  .map((anunt, index) => (
+                    <div key={index}>{anunt}</div>
+                  ))}
+                <IonButton routerLink="/anunturi/Judetean" expand="full">
+                  Vezi toate mesajele
+                </IonButton>
               </IonCardContent>
             </IonCard>
             <IonCard>
               <IonCardTitle>Avizier Local</IonCardTitle>
               <IonCardContent>
-                <div>🔴Pozitia SDB legata de festivalul Intencity</div>
-                <div>🔴Hai sa ne cunosti - SDB Open Day</div>
-                <IonButton expand="full">Vezi toate mesajele</IonButton>
+                {anunturiLocal
+                  ?.filter((anunt) => anunt.startsWith("🔴"))
+                  .map((anunt, index) => (
+                    <div key={index}>{anunt}</div>
+                  ))}
+                <IonButton routerLink="/anunturi/Local" expand="full">
+                  Vezi toate mesajele
+                </IonButton>
               </IonCardContent>
             </IonCard>
           </IonContent>

@@ -46,7 +46,7 @@ const App: React.FC = () => (
         <Route component={Docs} path="/docs/" />
         <Route component={Home} path="/home/" />
         <Route component={Plata} path="/plata/" />
-        <Route component={Anunturi} path="/anunturi/" />
+        <Route component={Anunturi} path="/anunturi/:context/" />
         <Route path="/organigrama/:context/" component={Organigrama} />
       </IonRouterOutlet>
     </IonReactRouter>
