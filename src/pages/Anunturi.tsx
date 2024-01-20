@@ -38,6 +38,7 @@ import { auth, db } from "../firebase";
 
 const Anunturi: React.FC = () => {
   let isMember: boolean;
+  let context: string = "Central";
 
   const [memberData, setMemberData] = useState<
     QueryDocumentSnapshot | undefined
@@ -222,101 +223,382 @@ const Anunturi: React.FC = () => {
 
   switch (isMember) {
     case true:
-      return (
-        <IonPage>
-          <IonHeader>
-            <IonToolbar>
-              <IonTitle>Anunturi</IonTitle>
-            </IonToolbar>
-          </IonHeader>
+      switch (context) {
+        case "Central":
+          return (
+            <IonPage>
+              <IonHeader>
+                <IonToolbar>
+                  <IonTitle>Anunturi</IonTitle>
+                </IonToolbar>
+              </IonHeader>
 
-          <IonContent className="ion-padding">
-            {anunturiCentral?.map((anunt, index) => (
-              <IonCard key={index}>
-                <IonCardTitle>
-                  {anunt.data().isInternal ? "🟣 " : "🔴 "}
-                  {anunt.data().titlu}
-                </IonCardTitle>
-                <IonCardContent>
-                  <div>{anunt.data().content}</div>
-                  <IonButton onClick={() => openModal(index)} expand="full">
-                    Deschide anuntul
-                  </IonButton>
-                </IonCardContent>
-                <IonModal isOpen={openModalIndex === index}>
-                  {" "}
-                  <IonHeader>
-                    <IonToolbar>
-                      <IonTitle>
-                        {anunt.data().isInternal ? "🟣 " : "🔴 "}
-                        {anunt.data().titlu}
-                      </IonTitle>
-                      <IonButtons slot="end">
-                        <IonButton onClick={() => closeModal()}>
-                          Close
-                        </IonButton>
-                      </IonButtons>
-                    </IonToolbar>
-                  </IonHeader>
-                  <IonContent className="ion-padding">
-                    <div>{anunt.data().content}</div>
-                  </IonContent>
-                </IonModal>
-              </IonCard>
-            ))}
-          </IonContent>
-        </IonPage>
-      );
+              <IonContent className="ion-padding">
+                {anunturiCentral?.map((anunt, index) => (
+                  <IonCard key={index}>
+                    <IonCardTitle>
+                      {anunt.data().isInternal ? "🟣 " : "🔴 "}
+                      {anunt.data().titlu}
+                    </IonCardTitle>
+                    <IonCardContent>
+                      <div>{anunt.data().content}</div>
+                      <IonButton onClick={() => openModal(index)} expand="full">
+                        Deschide anuntul
+                      </IonButton>
+                    </IonCardContent>
+                    <IonModal isOpen={openModalIndex === index}>
+                      {" "}
+                      <IonHeader>
+                        <IonToolbar>
+                          <IonTitle>
+                            {anunt.data().isInternal ? "🟣 " : "🔴 "}
+                            {anunt.data().titlu}
+                          </IonTitle>
+                          <IonButtons slot="end">
+                            <IonButton onClick={() => closeModal()}>
+                              Close
+                            </IonButton>
+                          </IonButtons>
+                        </IonToolbar>
+                      </IonHeader>
+                      <IonContent className="ion-padding">
+                        <div>{anunt.data().content}</div>
+                      </IonContent>
+                    </IonModal>
+                  </IonCard>
+                ))}
+              </IonContent>
+            </IonPage>
+          );
+          break;
+        case "Judetean":
+          return (
+            <IonPage>
+              <IonHeader>
+                <IonToolbar>
+                  <IonTitle>Anunturi</IonTitle>
+                </IonToolbar>
+              </IonHeader>
+
+              <IonContent className="ion-padding">
+                <IonList>
+                  <IonItem>
+                    <IonSelect
+                      aria-label="Judet"
+                      interface="action-sheet"
+                      placeholder="Judet"
+                      value={memberData?.data()?.filialaJudeteana || ""}
+                      onIonChange={(e) => getAnunturi(e.detail.value)}
+                    >
+                      {filialeJudetene &&
+                        filialeJudetene.map((filiala, index) => (
+                          <IonSelectOption key={index} value={filiala}>
+                            {filiala}
+                          </IonSelectOption>
+                        ))}
+                    </IonSelect>
+                  </IonItem>
+                </IonList>
+                {anunturiJudetean?.map((anunt, index) => (
+                  <IonCard key={index}>
+                    <IonCardTitle>
+                      {anunt.data().isInternal ? "🟣 " : "🔴 "}
+                      {anunt.data().titlu}
+                    </IonCardTitle>
+                    <IonCardContent>
+                      <div>{anunt.data().content}</div>
+                      <IonButton onClick={() => openModal(index)} expand="full">
+                        Deschide anuntul
+                      </IonButton>
+                    </IonCardContent>
+                    <IonModal isOpen={openModalIndex === index}>
+                      {" "}
+                      <IonHeader>
+                        <IonToolbar>
+                          <IonTitle>
+                            {anunt.data().isInternal ? "🟣 " : "🔴 "}
+                            {anunt.data().titlu}
+                          </IonTitle>
+                          <IonButtons slot="end">
+                            <IonButton onClick={() => closeModal()}>
+                              Close
+                            </IonButton>
+                          </IonButtons>
+                        </IonToolbar>
+                      </IonHeader>
+                      <IonContent className="ion-padding">
+                        <div>{anunt.data().content}</div>
+                      </IonContent>
+                    </IonModal>
+                  </IonCard>
+                ))}
+              </IonContent>
+            </IonPage>
+          );
+          break;
+        case "Local":
+          return (
+            <IonPage>
+              <IonHeader>
+                <IonToolbar>
+                  <IonTitle>Anunturi</IonTitle>
+                </IonToolbar>
+              </IonHeader>
+
+              <IonContent className="ion-padding">
+                <IonList>
+                  <IonItem>
+                    <IonSelect
+                      aria-label="Oras"
+                      interface="action-sheet"
+                      placeholder="Oras"
+                      value={memberData?.data()?.filialaLocala || ""}
+                      onIonChange={(e) => getAnunturi(e.detail.value)}
+                    >
+                      {filialeLocale &&
+                        filialeLocale.map((filiala, index) => (
+                          <IonSelectOption key={index} value={filiala}>
+                            {filiala}
+                          </IonSelectOption>
+                        ))}
+                    </IonSelect>
+                  </IonItem>
+                </IonList>
+                {anunturiLocal?.map((anunt, index) => (
+                  <IonCard key={index}>
+                    <IonCardTitle>
+                      {anunt.data().isInternal ? "🟣 " : "🔴 "}
+                      {anunt.data().titlu}
+                    </IonCardTitle>
+                    <IonCardContent>
+                      <div>{anunt.data().content}</div>
+                      <IonButton onClick={() => openModal(index)} expand="full">
+                        Deschide anuntul
+                      </IonButton>
+                    </IonCardContent>
+                    <IonModal isOpen={openModalIndex === index}>
+                      {" "}
+                      <IonHeader>
+                        <IonToolbar>
+                          <IonTitle>
+                            {anunt.data().isInternal ? "🟣 " : "🔴 "}
+                            {anunt.data().titlu}
+                          </IonTitle>
+                          <IonButtons slot="end">
+                            <IonButton onClick={() => closeModal()}>
+                              Close
+                            </IonButton>
+                          </IonButtons>
+                        </IonToolbar>
+                      </IonHeader>
+                      <IonContent className="ion-padding">
+                        <div>{anunt.data().content}</div>
+                      </IonContent>
+                    </IonModal>
+                  </IonCard>
+                ))}
+              </IonContent>
+            </IonPage>
+          );
+          break;
+      }
 
       break;
     case false:
-      return (
-        <IonPage>
-          <IonHeader>
-            <IonToolbar>
-              <IonTitle>Anunturi</IonTitle>
-            </IonToolbar>
-          </IonHeader>
+      switch (context) {
+        case "Central":
+          return (
+            <IonPage>
+              <IonHeader>
+                <IonToolbar>
+                  <IonTitle>Anunturi</IonTitle>
+                </IonToolbar>
+              </IonHeader>
 
-          <IonContent className="ion-padding">
-            {anunturiCentral
-              ?.filter((anunt) => isMember || !anunt.data().isInternal)
-              .map((anunt, index) => (
-                <IonCard key={index}>
-                  <IonCardTitle>
-                    {anunt.data().isInternal ? "🟣 " : "🔴 "}
-                    {anunt.data().titlu}
-                  </IonCardTitle>
-                  <IonCardContent>
-                    <div>{anunt.data().content}</div>
-                    <IonButton onClick={() => openModal(index)} expand="full">
-                      Deschide anuntul
-                    </IonButton>
-                  </IonCardContent>
-                  <IonModal isOpen={openModalIndex === index}>
-                    {" "}
-                    <IonHeader>
-                      <IonToolbar>
-                        <IonTitle>
-                          {anunt.data().isInternal ? "🟣 " : "🔴 "}
-                          {anunt.data().titlu}
-                        </IonTitle>
-                        <IonButtons slot="end">
-                          <IonButton onClick={() => closeModal()}>
-                            Close
-                          </IonButton>
-                        </IonButtons>
-                      </IonToolbar>
-                    </IonHeader>
-                    <IonContent className="ion-padding">
-                      <div>{anunt.data().content}</div>
-                    </IonContent>
-                  </IonModal>
-                </IonCard>
-              ))}
-          </IonContent>
-        </IonPage>
-      );
+              <IonContent className="ion-padding">
+                {anunturiCentral
+                  ?.filter((anunt) => isMember || !anunt.data().isInternal)
+                  .map((anunt, index) => (
+                    <IonCard key={index}>
+                      <IonCardTitle>
+                        {anunt.data().isInternal ? "🟣 " : "🔴 "}
+                        {anunt.data().titlu}
+                      </IonCardTitle>
+                      <IonCardContent>
+                        <div>{anunt.data().content}</div>
+                        <IonButton
+                          onClick={() => openModal(index)}
+                          expand="full"
+                        >
+                          Deschide anuntul
+                        </IonButton>
+                      </IonCardContent>
+                      <IonModal isOpen={openModalIndex === index}>
+                        {" "}
+                        <IonHeader>
+                          <IonToolbar>
+                            <IonTitle>
+                              {anunt.data().isInternal ? "🟣 " : "🔴 "}
+                              {anunt.data().titlu}
+                            </IonTitle>
+                            <IonButtons slot="end">
+                              <IonButton onClick={() => closeModal()}>
+                                Close
+                              </IonButton>
+                            </IonButtons>
+                          </IonToolbar>
+                        </IonHeader>
+                        <IonContent className="ion-padding">
+                          <div>{anunt.data().content}</div>
+                        </IonContent>
+                      </IonModal>
+                    </IonCard>
+                  ))}
+              </IonContent>
+            </IonPage>
+          );
+          break;
+        case "Judetean":
+          return (
+            <IonPage>
+              <IonHeader>
+                <IonToolbar>
+                  <IonTitle>Anunturi</IonTitle>
+                </IonToolbar>
+              </IonHeader>
+
+              <IonContent className="ion-padding">
+                <IonList>
+                  <IonItem>
+                    <IonSelect
+                      aria-label="Judet"
+                      interface="action-sheet"
+                      placeholder="Judet"
+                      value={memberData?.data()?.filialaJudeteana || ""}
+                      onIonChange={(e) => getAnunturi(e.detail.value)}
+                    >
+                      {filialeJudetene &&
+                        filialeJudetene.map((filiala, index) => (
+                          <IonSelectOption key={index} value={filiala}>
+                            {filiala}
+                          </IonSelectOption>
+                        ))}
+                    </IonSelect>
+                  </IonItem>
+                </IonList>
+                {anunturiJudetean
+                  ?.filter((anunt) => isMember || !anunt.data().isInternal)
+                  .map((anunt, index) => (
+                    <IonCard key={index}>
+                      <IonCardTitle>
+                        {anunt.data().isInternal ? "🟣 " : "🔴 "}
+                        {anunt.data().titlu}
+                      </IonCardTitle>
+                      <IonCardContent>
+                        <div>{anunt.data().content}</div>
+                        <IonButton
+                          onClick={() => openModal(index)}
+                          expand="full"
+                        >
+                          Deschide anuntul
+                        </IonButton>
+                      </IonCardContent>
+                      <IonModal isOpen={openModalIndex === index}>
+                        {" "}
+                        <IonHeader>
+                          <IonToolbar>
+                            <IonTitle>
+                              {anunt.data().isInternal ? "🟣 " : "🔴 "}
+                              {anunt.data().titlu}
+                            </IonTitle>
+                            <IonButtons slot="end">
+                              <IonButton onClick={() => closeModal()}>
+                                Close
+                              </IonButton>
+                            </IonButtons>
+                          </IonToolbar>
+                        </IonHeader>
+                        <IonContent className="ion-padding">
+                          <div>{anunt.data().content}</div>
+                        </IonContent>
+                      </IonModal>
+                    </IonCard>
+                  ))}
+              </IonContent>
+            </IonPage>
+          );
+          break;
+        case "Local":
+          return (
+            <IonPage>
+              <IonHeader>
+                <IonToolbar>
+                  <IonTitle>Anunturi</IonTitle>
+                </IonToolbar>
+              </IonHeader>
+
+              <IonContent className="ion-padding">
+                <IonList>
+                  <IonItem>
+                    <IonSelect
+                      aria-label="Oras"
+                      interface="action-sheet"
+                      placeholder="Oras"
+                      value={memberData?.data()?.filialaLocala || ""}
+                      onIonChange={(e) => getAnunturi(e.detail.value)}
+                    >
+                      {filialeLocale &&
+                        filialeLocale.map((filiala, index) => (
+                          <IonSelectOption key={index} value={filiala}>
+                            {filiala}
+                          </IonSelectOption>
+                        ))}
+                    </IonSelect>
+                  </IonItem>
+                </IonList>
+                {anunturiLocal
+                  ?.filter((anunt) => isMember || !anunt.data().isInternal)
+                  .map((anunt, index) => (
+                    <IonCard key={index}>
+                      <IonCardTitle>
+                        {anunt.data().isInternal ? "🟣 " : "🔴 "}
+                        {anunt.data().titlu}
+                      </IonCardTitle>
+                      <IonCardContent>
+                        <div>{anunt.data().content}</div>
+                        <IonButton
+                          onClick={() => openModal(index)}
+                          expand="full"
+                        >
+                          Deschide anuntul
+                        </IonButton>
+                      </IonCardContent>
+                      <IonModal isOpen={openModalIndex === index}>
+                        {" "}
+                        <IonHeader>
+                          <IonToolbar>
+                            <IonTitle>
+                              {anunt.data().isInternal ? "🟣 " : "🔴 "}
+                              {anunt.data().titlu}
+                            </IonTitle>
+                            <IonButtons slot="end">
+                              <IonButton onClick={() => closeModal()}>
+                                Close
+                              </IonButton>
+                            </IonButtons>
+                          </IonToolbar>
+                        </IonHeader>
+                        <IonContent className="ion-padding">
+                          <div>{anunt.data().content}</div>
+                        </IonContent>
+                      </IonModal>
+                    </IonCard>
+                  ))}
+              </IonContent>
+            </IonPage>
+          );
+          break;
+      }
   }
 };
 

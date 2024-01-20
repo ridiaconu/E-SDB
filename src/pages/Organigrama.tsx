@@ -16,15 +16,57 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { db } from "../firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 let fireDB = db;
 
 const Organigrama: React.FC = () => {
   const { context } = useParams<{ context: string }>();
+
+  const [filialeJudetene, setFilialeJudetene] = useState<
+    Array<String> | undefined
+  >(undefined);
+  const [filialeLocale, setFilialeLocale] = useState<Array<String> | undefined>(
+    undefined
+  );
+
+  async function getFilialeJudetene(): Promise<String[] | undefined> {
+    const colRef = collection(db, "filiale");
+    try {
+      const colSnap = await getDocs(colRef);
+      const filialeJudetene = [];
+      for (const doc of colSnap.docs) {
+        if (doc.data()?.context == "judetean") {
+          filialeJudetene.push(doc.id);
+        }
+      }
+      return filialeJudetene;
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
+  }
+
+  async function getFilialeLocale(): Promise<String[] | undefined> {
+    const colRef = collection(db, "filiale");
+    try {
+      const colSnap = await getDocs(colRef);
+      const filialeLocale = [];
+      for (const doc of colSnap.docs) {
+        if (doc.data()?.context == "local") {
+          filialeLocale.push(doc.id);
+        }
+      }
+      return filialeLocale;
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
+  }
 
   switch (context) {
     case "Central":
