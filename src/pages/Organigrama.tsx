@@ -144,7 +144,9 @@ const Organigrama: React.FC = () => {
 
   useEffect(() => {
     async function fetchBirouJudetean() {
-      const data = await getBirou(memberData?.data()?.filialaJudeteana || "");
+      const data = await getBirou(
+        memberData?.data()?.filialaJudeteana || "Dolj"
+      );
       setBirouJudetean(data);
     }
 
@@ -153,7 +155,9 @@ const Organigrama: React.FC = () => {
 
   useEffect(() => {
     async function fetchBirouLocal() {
-      const data = await getBirou(memberData?.data()?.filialaLocale || "");
+      const data = await getBirou(
+        memberData?.data()?.filialaLocale || "Craiova"
+      );
       setBirouLocal(data);
     }
 
@@ -201,7 +205,7 @@ const Organigrama: React.FC = () => {
           <IonPage>
             <IonHeader>
               <IonToolbar>
-                <IonTitle>Birou National</IonTitle>
+                <IonTitle>Birou Central</IonTitle>
               </IonToolbar>
             </IonHeader>
             <IonContent className="ion-padding">
@@ -271,7 +275,7 @@ const Organigrama: React.FC = () => {
                     aria-label="Judet"
                     interface="action-sheet"
                     placeholder="Judet"
-                    value={memberData?.data()?.filialaJudeteana || ""}
+                    value={memberData?.data()?.filialaJudeteana || "Dolj"}
                     onIonChange={(e) => getBirou(e.detail.value)}
                   >
                     {filialeJudetene &&
@@ -336,77 +340,83 @@ const Organigrama: React.FC = () => {
 
       break;
     case "Local":
-      return (
-        <IonPage>
-          <IonHeader>
-            <IonToolbar>
-              <IonTitle>Birou Local</IonTitle>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent className="ion-padding">
-            <IonList>
-              <IonItem>
-                <IonSelect interface="action-sheet" placeholder="Select fruit">
-                  <IonSelectOption value="apples">Apples</IonSelectOption>
-                  <IonSelectOption value="oranges">Oranges</IonSelectOption>
-                  <IonSelectOption value="bananas">Bananas</IonSelectOption>
-                </IonSelect>
-              </IonItem>
-            </IonList>
+      if (birouLocal) {
+        const presedinte = birouLocal.get("presedinte");
+        const vicepresedinti = birouLocal.get("vicepresedinti");
+        const membrii = birouLocal.get("membriiBirou");
+        return (
+          <IonPage>
+            <IonHeader>
+              <IonToolbar>
+                <IonTitle>Birou Local</IonTitle>
+              </IonToolbar>
+            </IonHeader>
+            <IonContent className="ion-padding">
+              <IonList>
+                <IonItem>
+                  <IonSelect
+                    aria-label="Judet"
+                    interface="action-sheet"
+                    placeholder="Judet"
+                    value={memberData?.data()?.filialaLocala || "Craiova"}
+                    onIonChange={(e) => getBirou(e.detail.value)}
+                  >
+                    {filialeLocale &&
+                      filialeLocale.map((filiala, index) => (
+                        <IonSelectOption key={index} value={filiala}>
+                          {filiala}
+                        </IonSelectOption>
+                      ))}
+                  </IonSelect>
+                </IonItem>
+              </IonList>
 
-            <IonCard>
-              <img
-                alt="Silhouette of mountains"
-                src="https://static.boredpanda.com/blog/wp-content/uploads/2018/12/ai-image-generation-fake-faces-people-nvidia-5c18b207b7231__700.jpg"
-              />
-              <IonCardHeader>
-                <IonCardTitle>Presedinte</IonCardTitle>
-                <IonCardSubtitle>Un smecher</IonCardSubtitle>
-              </IonCardHeader>
-            </IonCard>
-            <IonCard>
-              <IonCardTitle className="ion-padding">
-                Vicepresedinti
-              </IonCardTitle>
-              <IonCardContent>
-                <IonList>
-                  <IonItem>
-                    <IonThumbnail slot="start">
-                      <img
-                        alt="Silhouette of mountains"
-                        src="https://2.bp.blogspot.com/-wUD2SGHiBCg/XGVk3D2_6FI/AAAAAAACkqc/LWNsgSdN5YwQNqy7IsRj95GrjqauK5ZzACLcBGAs/s1600/thispersondoesnotexist-2.jpg"
-                      />
-                    </IonThumbnail>
-                    <IonLabel>Dan Bazatu</IonLabel>
-                  </IonItem>
-                  <IonItem>
-                    <IonThumbnail slot="start">
-                      <img
-                        alt="Silhouette of mountains"
-                        src="https://i.redd.it/hcpu7df05tg21.jpg"
-                      />
-                    </IonThumbnail>
-                    <IonLabel>Cristy</IonLabel>
-                  </IonItem>
-                </IonList>
-              </IonCardContent>
-            </IonCard>
-            <IonCard>
-              <IonCardHeader>
-                <IonCardTitle>Membrii Biroului Local</IonCardTitle>
-              </IonCardHeader>
+              <IonCard>
+                <img alt="Silhouette of mountains" src={presedinte.photoURL} />
+                <IonCardHeader>
+                  <IonCardTitle>{presedinte.nume}</IonCardTitle>
+                  <IonCardSubtitle>Presedinte</IonCardSubtitle>
+                </IonCardHeader>
+              </IonCard>
+              <IonCard>
+                <IonCardTitle className="ion-padding">
+                  Vicepresedinti
+                </IonCardTitle>
+                <IonCardContent>
+                  <IonList>
+                    {vicepresedinti.map((vicepresedinte: any) => (
+                      <IonItem>
+                        <IonThumbnail slot="start">
+                          <img
+                            alt="Silhouette of mountains"
+                            src={vicepresedinte.photoURL}
+                          />
+                        </IonThumbnail>
+                        <IonLabel>{vicepresedinte.nume}</IonLabel>
+                      </IonItem>
+                    ))}
+                  </IonList>
+                </IonCardContent>
+              </IonCard>
+              <IonCard>
+                <IonCardHeader>
+                  <IonCardTitle>Membrii Biroului Local</IonCardTitle>
+                </IonCardHeader>
 
-              <IonCardContent>
-                <IonList>
-                  <IonItem>Ion frizeru</IonItem>
-                  <IonItem>Un smecher</IonItem>
-                  <IonItem>Un hardicapat</IonItem>
-                </IonList>
-              </IonCardContent>
-            </IonCard>
-          </IonContent>
-        </IonPage>
-      );
+                <IonCardContent>
+                  <IonList>
+                    {membrii.map((membru: any) => (
+                      <IonItem>
+                        <IonLabel>{membru.nume}</IonLabel>
+                      </IonItem>
+                    ))}
+                  </IonList>
+                </IonCardContent>
+              </IonCard>
+            </IonContent>
+          </IonPage>
+        );
+      }
 
       break;
   }
