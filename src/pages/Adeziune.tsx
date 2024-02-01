@@ -21,12 +21,50 @@ import {
   IonCheckbox,
 } from "@ionic/react";
 import { logoGoogle } from "ionicons/icons";
+import { auth, db } from "../firebase";
+import { doc, getDoc, collection, setDoc } from "firebase/firestore";
 
+const createMember = async (event: any) => {
+  event.preventDefault();
+  const user = auth.currentUser;
+  const uid = user ? user.uid : null;
+
+  if (uid) {
+    const docref = doc(db, "members", uid);
+
+    const docSnap = await getDoc(docref);
+
+    const colref = collection(db, "members");
+
+    if (docSnap.exists()) {
+      console.log("Member already exists");
+    } else {
+      // docSnap.data() will be undefined in this case
+      await setDoc(doc(colref, uid), {
+        nume: {
+          numeFamilie: event.target[1].value,
+          prenume: event.target[0].value,
+        },
+        email: auth.currentUser?.email,
+        adresa: {
+          localitate: event.target[2].value,
+          strada: event.target[3].value,
+          numar: event.target[4].value,
+        },
+        filialaJudeteana: event.target[5].value,
+        filialaLocala: event.target[6].value,
+      });
+      console.log("Member has been created");
+      console.log(event.target[0].value);
+      console.log(event.target[1].value);
+      console.log(event.target[2].value);
+      console.log(event.target[3].value);
+      console.log(event.target[4].value);
+      console.log(event.target[5].value);
+    }
+  }
+};
 const Adeziune = () => {
-  const doLogin = (event: any) => {
-    event.preventDefault();
-    console.log("doLogin");
-  };
   return (
     <IonPage>
       <IonHeader>
@@ -42,7 +80,7 @@ const Adeziune = () => {
           </h2>
           <IonCard>
             <IonCardContent>
-              <form onSubmit={doLogin}>
+              <form onSubmit={createMember}>
                 <IonInput
                   label="Nume"
                   labelPlacement="floating"
@@ -55,9 +93,20 @@ const Adeziune = () => {
                   className="ion-margin-top"
                 />
                 <IonInput
-                  label="Adresa de E-mail"
+                  label="Localitate"
                   labelPlacement="floating"
-                  type="email"
+                  fill="outline"
+                  className="ion-margin-top"
+                />
+                <IonInput
+                  label="Strada"
+                  labelPlacement="floating"
+                  fill="outline"
+                  className="ion-margin-top"
+                />
+                <IonInput
+                  label="Numar"
+                  labelPlacement="floating"
                   fill="outline"
                   className="ion-margin-top"
                 />
@@ -73,9 +122,13 @@ const Adeziune = () => {
                               interface="action-sheet"
                               placeholder="Judet"
                             >
-                              <IonSelectOption value="DJ">Dolj</IonSelectOption>
-                              <IonSelectOption value="GJ">Gorj</IonSelectOption>
-                              <IonSelectOption value="VL">
+                              <IonSelectOption value="Dolj">
+                                Dolj
+                              </IonSelectOption>
+                              <IonSelectOption value="Gorj">
+                                Gorj
+                              </IonSelectOption>
+                              <IonSelectOption value="Valcea">
                                 Valcea
                               </IonSelectOption>
                             </IonSelect>
@@ -93,13 +146,13 @@ const Adeziune = () => {
                               interface="action-sheet"
                               placeholder="Oras"
                             >
-                              <IonSelectOption value="DJ">
+                              <IonSelectOption value="Craiova">
                                 Craiova
                               </IonSelectOption>
-                              <IonSelectOption value="GJ">
+                              <IonSelectOption value="Targu Jiu">
                                 Targu Jiu
                               </IonSelectOption>
-                              <IonSelectOption value="VL">
+                              <IonSelectOption value="Ramnicu Valcea">
                                 Ramnicu Valcea
                               </IonSelectOption>
                             </IonSelect>
@@ -118,7 +171,7 @@ const Adeziune = () => {
                 </IonCheckbox>
                 <IonButton
                   routerLink="/home/avizier"
-                  type="button"
+                  type="submit"
                   className="ion-margin-top"
                   expand="full"
                 >
