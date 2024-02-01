@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   IonContent,
   IonHeader,
@@ -22,7 +22,7 @@ import {
 } from "@ionic/react";
 import { logoGoogle } from "ionicons/icons";
 import { auth, db } from "../firebase";
-import { doc, getDoc, collection, setDoc } from "firebase/firestore";
+import { doc, getDoc, collection, setDoc, getDocs } from "firebase/firestore";
 
 const createMember = async (event: any) => {
   event.preventDefault();
@@ -55,16 +55,69 @@ const createMember = async (event: any) => {
         filialaLocala: event.target[6].value,
       });
       console.log("Member has been created");
-      console.log(event.target[0].value);
-      console.log(event.target[1].value);
-      console.log(event.target[2].value);
-      console.log(event.target[3].value);
-      console.log(event.target[4].value);
-      console.log(event.target[5].value);
     }
   }
 };
 const Adeziune = () => {
+  const [filialeJudetene, setFilialeJudetene] = useState<
+    Array<String> | undefined
+  >(undefined);
+  const [filialeLocale, setFilialeLocale] = useState<Array<String> | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    async function fetchFilialeJudetene() {
+      const data = await getFilialeJudetene();
+      setFilialeJudetene(data); // Update the state with the member data
+    }
+
+    fetchFilialeJudetene();
+  }, []);
+
+  useEffect(() => {
+    async function fetchFilialeLocale() {
+      const data = await getFilialeLocale();
+      setFilialeLocale(data); // Update the state with the member data
+    }
+
+    fetchFilialeLocale();
+  }, []);
+
+  async function getFilialeJudetene(): Promise<String[] | undefined> {
+    const colRef = collection(db, "filiale");
+    try {
+      const colSnap = await getDocs(colRef);
+      const filialeJudetene = [];
+      for (const doc of colSnap.docs) {
+        if (doc.data()?.context == "judetean") {
+          filialeJudetene.push(doc.id);
+        }
+      }
+      return filialeJudetene;
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
+  }
+
+  async function getFilialeLocale(): Promise<String[] | undefined> {
+    const colRef = collection(db, "filiale");
+    try {
+      const colSnap = await getDocs(colRef);
+      const filialeLocale = [];
+      for (const doc of colSnap.docs) {
+        if (doc.data()?.context == "local") {
+          filialeLocale.push(doc.id);
+        }
+      }
+      return filialeLocale;
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
+  }
+
   return (
     <IonPage>
       <IonHeader>
@@ -121,16 +174,14 @@ const Adeziune = () => {
                               aria-label="Judet"
                               interface="action-sheet"
                               placeholder="Judet"
+                              value="Dolj"
                             >
-                              <IonSelectOption value="Dolj">
-                                Dolj
-                              </IonSelectOption>
-                              <IonSelectOption value="Gorj">
-                                Gorj
-                              </IonSelectOption>
-                              <IonSelectOption value="Valcea">
-                                Valcea
-                              </IonSelectOption>
+                              {filialeJudetene &&
+                                filialeJudetene.map((filiala, index) => (
+                                  <IonSelectOption key={index} value={filiala}>
+                                    {filiala}
+                                  </IonSelectOption>
+                                ))}
                             </IonSelect>
                           </IonItem>
                         </IonList>
@@ -145,16 +196,14 @@ const Adeziune = () => {
                               aria-label="Oras"
                               interface="action-sheet"
                               placeholder="Oras"
+                              value="Craiova"
                             >
-                              <IonSelectOption value="Craiova">
-                                Craiova
-                              </IonSelectOption>
-                              <IonSelectOption value="Targu Jiu">
-                                Targu Jiu
-                              </IonSelectOption>
-                              <IonSelectOption value="Ramnicu Valcea">
-                                Ramnicu Valcea
-                              </IonSelectOption>
+                              {filialeLocale &&
+                                filialeLocale.map((filiala, index) => (
+                                  <IonSelectOption key={index} value={filiala}>
+                                    {filiala}
+                                  </IonSelectOption>
+                                ))}
                             </IonSelect>
                           </IonItem>
                         </IonList>
