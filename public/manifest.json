@@ -1,6 +1,6 @@
 {
-  "short_name": "Ionic App",
-  "name": "My Ionic App",
+  "short_name": "E-SDB",
+  "name": "E-SDB, platforma interna a partidului Scara De Bloc",
   "icons": [
     {
       "src": "assets/icon/favicon.png",
