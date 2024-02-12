@@ -131,13 +131,22 @@ const Anunturi: React.FC = () => {
     if (user) {
       const uid = user.uid;
       const docRef = doc(db, "members", uid);
+      const docRef2 = doc(db, "users", uid);
 
       try {
         const docSnap = await getDoc(docRef);
-
+        const docSnap2 = await getDoc(docRef2);
         if (docSnap.exists()) {
-          console.log("Member data:", docSnap.data());
-          return docSnap;
+          if (docSnap2.exists()) {
+            if (docSnap2.data()?.isMember == false) {
+              console.log("User is not a member");
+              return undefined;
+            } else {
+              console.log("User is a member");
+              console.log("Member data:", docSnap.data());
+              return docSnap;
+            }
+          }
         } else {
           console.log("Member does not exist");
           return undefined;

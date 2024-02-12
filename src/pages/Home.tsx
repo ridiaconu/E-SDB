@@ -43,13 +43,16 @@ import {
 } from "firebase/firestore";
 
 import { auth, db } from "../firebase";
+import Dashboard from "./Dashboard";
 
 const isMemberContext = createContext<boolean>(false);
+const isAdminContext = createContext<boolean>(false);
 
 const Home: React.FC = () => {
   const fireAuth = auth;
   auth.setPersistence(browserLocalPersistence);
   const [isMember, setIsMember] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   async function getMemberStatus(): Promise<boolean> {
     const fireDb = db;
@@ -66,10 +69,10 @@ const Home: React.FC = () => {
       if (docSnap.exists()) {
         memberStatus = docSnap.data().isMember;
         if (memberStatus == true) {
-          console.log("membru");
+          //console.log("membru");
           return true;
         } else {
-          console.log("numembu");
+          //console.log("numembu");
           return false;
         }
       } else {
@@ -82,12 +85,47 @@ const Home: React.FC = () => {
     }
   }
 
+  async function getAdminStatus(): Promise<boolean> {
+    let user = auth.currentUser;
+
+    if (user) {
+      const uid = user.uid;
+      const docRef = doc(db, "users", uid);
+
+      try {
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          //console.log("Member data:", docSnap.data());
+          return docSnap.data()?.isAdmin;
+        } else {
+          console.log("Member does not exist");
+          return false;
+        }
+      } catch (error) {
+        console.error("Error getting member data:", error);
+        throw error;
+      }
+    } else {
+      console.log("User is not authenticated");
+      return false;
+    }
+  }
+
   useEffect(() => {
     async function fetchMemberStatus() {
       const memberStatus = await getMemberStatus();
+      //localStorage.setItem(isMember, memberStatus);
       setIsMember(memberStatus);
     }
     fetchMemberStatus();
+  }, []);
+  useEffect(() => {
+    async function fetchAdminStatus() {
+      const adminStatus = await getAdminStatus();
+      setIsAdmin(adminStatus);
+    }
+    fetchAdminStatus();
   }, []);
   return (
     <isMemberContext.Provider value={isMember}>
@@ -105,6 +143,9 @@ const Home: React.FC = () => {
           <Route path="/plata/">
             <Plata isMember={isMember}></Plata>
           </Route>
+          <Route path="/home/dash">
+            <Dashboard isMember={isMember && isAdmin} />
+          </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
           <IonTabButton tab="Avizier" href="/home/avizier">
@@ -113,6 +154,11 @@ const Home: React.FC = () => {
           <IonTabButton tab="contact" href="/home/docs">
             <IonIcon icon={document} />
           </IonTabButton>
+          {isAdmin && isMember ? (
+            <IonTabButton tab="admin" href="/home/dash">
+              <IonIcon icon={settings} />
+            </IonTabButton>
+          ) : null}
           <IonTabButton tab="settings" href="/home/profil">
             <IonIcon icon={personCircle} />
           </IonTabButton>
