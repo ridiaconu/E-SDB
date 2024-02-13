@@ -15,8 +15,22 @@ import {
   IonRow,
   IonCol,
 } from "@ionic/react";
+import { AppLauncher } from "@capacitor/app-launcher";
 
 const Docs: React.FC<{ isMember: boolean }> = ({ isMember }) => {
+  const openStatut = async () => {
+    const { value } = await AppLauncher.canOpenUrl({
+      url: "https://firebasestorage.googleapis.com/v0/b/e-sdb-739c9.appspot.com/o/statut.pdf?alt=media&token=d192538a-462e-4724-afb2-83e8a6b5a7ea",
+    });
+
+    value === false ? console.log("Can open url: ", value) : null;
+    if (value === true) {
+      await AppLauncher.openUrl({
+        url: "https://firebasestorage.googleapis.com/v0/b/e-sdb-739c9.appspot.com/o/statut.pdf?alt=media&token=d192538a-462e-4724-afb2-83e8a6b5a7ea",
+      });
+    }
+  };
+
   switch (isMember) {
     case true:
       return (
@@ -55,7 +69,7 @@ const Docs: React.FC<{ isMember: boolean }> = ({ isMember }) => {
                 <IonCardTitle className="ion-text-center">
                   Statut SDB
                 </IonCardTitle>
-                <IonButton>Citeste aici</IonButton>
+                <IonButton onClick={openStatut}>Citeste aici</IonButton>
               </IonCardHeader>
             </IonCard>
 
@@ -123,7 +137,7 @@ const Docs: React.FC<{ isMember: boolean }> = ({ isMember }) => {
                 <IonCardTitle className="ion-text-center">
                   Statut SDB
                 </IonCardTitle>
-                <IonButton>Citeste aici</IonButton>
+                <IonButton onClick={openStatut}>Citeste aici</IonButton>
               </IonCardHeader>
             </IonCard>
           </IonContent>

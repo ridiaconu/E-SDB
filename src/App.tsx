@@ -31,6 +31,7 @@ import Plata from "./pages/Plata";
 
 import "./firebase";
 import Anunturi from "./pages/Anunturi";
+import Statut from "./pages/Statut";
 
 setupIonicReact();
 
@@ -48,6 +49,7 @@ const App: React.FC = () => (
         <Route component={Plata} path="/plata/" />
         <Route component={Anunturi} path="/anunturi/:context/" />
         <Route path="/organigrama/:context/" component={Organigrama} />
+        <Route component={Statut} path="/statut/" />
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
