@@ -33,6 +33,7 @@ import {
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
+import { currentMember } from "../Auth";
 
 const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
   const [memberData, setMemberData] = useState<
