@@ -27,6 +27,7 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  orderBy,
   query,
   setDoc,
   where,
@@ -149,8 +150,9 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
 
   async function getAnunturi(filiala: String): Promise<String[] | undefined> {
     const colRef = collection(db, "filiale/" + filiala + "/anunturi");
+    const q = query(colRef, orderBy("timestamp", "desc")); // Order by timestamp in descending order
     try {
-      const colSnap = await getDocs(colRef);
+      const colSnap = await getDocs(q);
       const titles = [];
 
       for (const doc of colSnap.docs) {

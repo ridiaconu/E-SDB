@@ -29,6 +29,7 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  orderBy,
   query,
   setDoc,
   where,
@@ -165,8 +166,10 @@ const Anunturi: React.FC = () => {
     filiala: string
   ): Promise<QueryDocumentSnapshot[] | undefined> {
     const colRef = collection(db, "filiale/" + filiala + "/anunturi");
+    const q = query(colRef, orderBy("timestamp", "desc")); // Order by timestamp in descending order
+
     try {
-      const colSnap = await getDocs(colRef);
+      const colSnap = await getDocs(q);
       const anunturi: QueryDocumentSnapshot[] = [];
 
       for (const doc of colSnap.docs) {

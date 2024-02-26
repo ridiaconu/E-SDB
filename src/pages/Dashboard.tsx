@@ -179,7 +179,9 @@ const Dashboard: React.FC<{ isMember: boolean }> = ({ isMember }) => {
         <IonCard>
           <IonCardTitle>Publica un nou anunt</IonCardTitle>
           <IonCardContent>
-            <div>Creaza un nou anunt pentru filiala Craiova</div>
+            <div>
+              Creaza un nou anunt pentru filiala {memberData?.data().president}
+            </div>
             <IonButton routerLink="/createanunt" expand="full">
               Creaza anunt
             </IonButton>
