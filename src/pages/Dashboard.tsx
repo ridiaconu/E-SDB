@@ -21,9 +21,11 @@ import {
   DocumentData,
   DocumentSnapshot,
   QueryDocumentSnapshot,
+  and,
   collection,
   collectionGroup,
   doc,
+  getCountFromServer,
   getDoc,
   getDocs,
   getFirestore,
@@ -42,9 +44,9 @@ const Dashboard: React.FC<{ isMember: boolean }> = ({ isMember }) => {
     QueryDocumentSnapshot | undefined
   >(undefined); // Use state to store the member data
 
-  const [adeziuni, setAdeziuni] = useState<string[] | undefined>(undefined);
+  const [adeziuni, setAdeziuni] = useState<Number | undefined>(undefined);
 
-  const [noMembers, setNoMembers] = useState<number | undefined>(undefined);
+  const [noMembers, setNoMembers] = useState<Number | undefined>(undefined);
 
   useEffect(() => {
     async function fetchNoMembers() {
@@ -75,45 +77,27 @@ const Dashboard: React.FC<{ isMember: boolean }> = ({ isMember }) => {
 
   async function getNoMembers() {
     const membersCollection = collection(db, "members");
-    try {
-      const colSnap = await getDocs(membersCollection);
-      let noMembers = 0;
-
-      for (const doc of colSnap.docs) {
-        if (doc.data()?.filialaLocala == memberData?.data()?.president) {
-          if (doc.data()?.nivelCotizatie) {
-            noMembers = noMembers + 1;
-          }
-        }
-      }
-
-      return noMembers;
-    } catch (error) {
-      console.error(error);
-      return undefined;
-    }
+    const q = query(
+      membersCollection,
+      where("filialaLocala", "==", memberData?.data()?.president)
+    );
+    const memberCount = await getCountFromServer(q);
+    console.log("Member count:", memberCount, Number(memberCount));
+    return memberCount.data().count;
   }
 
   async function getAdeziuni() {
     const membersCollection = collection(db, "members");
-    try {
-      const colSnap = await getDocs(membersCollection);
-      const titles = [];
+    const q = query(
+      membersCollection,
+      where("filialaLocala", "==", memberData?.data()?.president),
+      where("nivelCotizatie", "==", null)
+    );
 
-      for (const doc of colSnap.docs) {
-        if (doc.data()?.filialaLocala == memberData?.data()?.president) {
-          if (!doc.data().nivelCotizatie) {
-            let nume = doc.data().nume + " " + doc.data().prenume;
-            titles.push(nume);
-          }
-        }
-      }
+    const adeziuniCount = await getCountFromServer(q);
+    console.log("Adeziuni count:", adeziuniCount, Number(adeziuniCount));
 
-      return titles;
-    } catch (error) {
-      console.error(error);
-      return undefined;
-    }
+    return adeziuniCount.data().count;
   }
 
   async function getMemberData(): Promise<QueryDocumentSnapshot | undefined> {
@@ -167,8 +151,8 @@ const Dashboard: React.FC<{ isMember: boolean }> = ({ isMember }) => {
           <IonCardTitle>Cereri adeziune</IonCardTitle>
           <IonCardContent>
             <div>
-              {adeziuni?.length
-                ? `Exista ${adeziuni.length} cereri de adeziune`
+              {adeziuni ?? 0 > 0
+                ? `Exista ${adeziuni ?? 0} cereri de adeziune`
                 : "Nu exista cereri de adeziune"}
             </div>
             <IonButton routerLink="/cererilist" expand="full">

@@ -34,6 +34,7 @@ import Anunturi from "./pages/Anunturi";
 import Statut from "./pages/Statut";
 import CreateAnunt from "./pages/CreateAnunt";
 import AdeziuniList from "./pages/AdeziuniList";
+import MemberList from "./pages/MemberList";
 
 setupIonicReact();
 
@@ -54,6 +55,7 @@ const App: React.FC = () => (
         <Route component={Statut} path="/statut/" />
         <Route component={CreateAnunt} path="/createanunt/" />
         <Route path="/cererilist/" component={AdeziuniList} />
+        <Route path="/memberslist/" component={MemberList} />
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>

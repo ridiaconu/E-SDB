@@ -27,6 +27,7 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  limit,
   orderBy,
   query,
   setDoc,
@@ -150,7 +151,7 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
 
   async function getAnunturi(filiala: String): Promise<String[] | undefined> {
     const colRef = collection(db, "filiale/" + filiala + "/anunturi");
-    const q = query(colRef, orderBy("timestamp", "desc")); // Order by timestamp in descending order
+    const q = query(colRef, orderBy("timestamp", "desc"), limit(3)); // Order by timestamp in descending order
     try {
       const colSnap = await getDocs(q);
       const titles = [];
@@ -176,13 +177,12 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
 
   async function getFilialeJudetene(): Promise<String[] | undefined> {
     const colRef = collection(db, "filiale");
+    const q = query(colRef, where("context", "==", "judetean"));
     try {
-      const colSnap = await getDocs(colRef);
+      const colSnap = await getDocs(q);
       const filialeJudetene = [];
       for (const doc of colSnap.docs) {
-        if (doc.data()?.context == "judetean") {
-          filialeJudetene.push(doc.id);
-        }
+        filialeJudetene.push(doc.id);
       }
       return filialeJudetene;
     } catch (error) {
@@ -193,13 +193,13 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
 
   async function getFilialeLocale(): Promise<String[] | undefined> {
     const colRef = collection(db, "filiale");
+    const q = query(colRef, where("context", "==", "local"));
+
     try {
-      const colSnap = await getDocs(colRef);
+      const colSnap = await getDocs(q);
       const filialeLocale = [];
       for (const doc of colSnap.docs) {
-        if (doc.data()?.context == "local") {
-          filialeLocale.push(doc.id);
-        }
+        filialeLocale.push(doc.id);
       }
       return filialeLocale;
     } catch (error) {
