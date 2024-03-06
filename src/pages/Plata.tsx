@@ -21,10 +21,42 @@ import {
   IonCheckbox,
   IonText,
 } from "@ionic/react";
+import { getCheckoutUrl } from "../Stripe";
+import { app } from "../firebase";
+import { useIonRouter } from "@ionic/react";
+import { AppLauncher } from "@capacitor/app-launcher";
 
 const Plata: React.FC<{ isMember: boolean }> = ({ isMember }) => {
-  const doLogin = (event: any) => {
+  const plataCotizatie = async (event: any) => {
     event.preventDefault();
+    if (isMember) {
+      const priceId = "price_1OrS3FDS4hJmQDZcMZv0zfbc";
+      const checkOutURL = await getCheckoutUrl(app, priceId);
+      const { value } = await AppLauncher.canOpenUrl({
+        url: checkOutURL,
+      });
+
+      value === false ? console.log("Can open url: ", value) : null;
+      if (value === true) {
+        await AppLauncher.openUrl({
+          url: checkOutURL,
+        });
+      }
+    } else {
+      const priceId = "price_1OrS5sDS4hJmQDZciPMC1so0";
+      const checkOutURL = await getCheckoutUrl(app, priceId);
+      const { value } = await AppLauncher.canOpenUrl({
+        url: checkOutURL,
+      });
+
+      value === false ? console.log("Can open url: ", value) : null;
+      if (value === true) {
+        await AppLauncher.openUrl({
+          url: checkOutURL,
+        });
+      }
+    }
+
     console.log("doLogin");
   };
   switch (isMember) {
@@ -42,7 +74,7 @@ const Plata: React.FC<{ isMember: boolean }> = ({ isMember }) => {
               <h2 className="ion-text-center ion-margin-top">Date Platitor</h2>
               <IonCard>
                 <IonCardContent>
-                  <form onSubmit={doLogin}>
+                  <form onSubmit={plataCotizatie}>
                     <IonInput
                       label="Nume"
                       labelPlacement="floating"
@@ -125,8 +157,7 @@ const Plata: React.FC<{ isMember: boolean }> = ({ isMember }) => {
                       </IonRow>
                     </IonGrid>
                     <IonButton
-                      routerLink="/home/avizier"
-                      type="button"
+                      type="submit"
                       className="ion-margin-top"
                       expand="full"
                     >
@@ -154,7 +185,7 @@ const Plata: React.FC<{ isMember: boolean }> = ({ isMember }) => {
               <h2 className="ion-text-center ion-margin-top">Date Platitor</h2>
               <IonCard>
                 <IonCardContent>
-                  <form onSubmit={doLogin}>
+                  <form onSubmit={plataCotizatie}>
                     <IonInput
                       label="Nume"
                       labelPlacement="floating"
