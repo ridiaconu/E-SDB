@@ -1,23 +1,32 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
 
+admin.initializeApp();
 
-/*
-import {onRequest} from "firebase-functions/v2/https";
-import * as logger from "firebase-functions/logger";
+export const decreaseValueMonthly = functions.pubsub
+  .schedule("0 0 1 * *") // Trigger at midnight on the 1st day of each month
+  .timeZone("UTC")
+  .onRun(async () => {
+    try {
+      const collectionRef = admin.firestore().collection("members");
+      const snapshot = await collectionRef.get();
 
+      const batch = admin.firestore().batch();
 
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
+      snapshot.forEach((doc) => {
+        const currentValue = doc.data().nivelCotizatie;
+        const decreasedValue = currentValue - 1;
 
-export const helloWorld = onRequest((request, response) => {
-  logger.info("Hello logs!", {structuredData: true});
-  response.send("Hello from Firebase!");
-});
-*/
+        batch.update(collectionRef.doc(doc.id), {
+          your_field_name: decreasedValue,
+        });
+      });
+
+      await batch.commit();
+
+      return null;
+    } catch (error) {
+      console.error("Error:", error);
+      return null;
+    }
+  });
