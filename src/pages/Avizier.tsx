@@ -34,8 +34,10 @@ import {
   where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { auth, db } from "../firebase";
+import { app, auth, db } from "../firebase";
 import { currentMember } from "../Auth";
+import { getCheckoutUrl } from "../Stripe";
+import { AppLauncher } from "@capacitor/app-launcher";
 
 const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
   const [memberData, setMemberData] = useState<
@@ -48,13 +50,13 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
     Array<String> | undefined
   >(undefined);
   const [anunturiLocal, setAnunturiLocal] = useState<Array<String> | undefined>(
-    undefined
+    undefined,
   );
   const [filialeJudetene, setFilialeJudetene] = useState<
     Array<String> | undefined
   >(undefined);
   const [filialeLocale, setFilialeLocale] = useState<Array<String> | undefined>(
-    undefined
+    undefined,
   );
 
   const fireDb = db;
@@ -208,6 +210,39 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
     }
   }
 
+  const plataCotizatie = async (event: any) => {
+    event.preventDefault();
+    if (isMember) {
+      const priceId = "price_1OrS3FDS4hJmQDZcMZv0zfbc";
+      const checkOutURL = await getCheckoutUrl(app, priceId);
+      const { value } = await AppLauncher.canOpenUrl({
+        url: checkOutURL,
+      });
+
+      value === false ? console.log("Can open url: ", value) : null;
+      if (value === true) {
+        await AppLauncher.openUrl({
+          url: checkOutURL,
+        });
+      }
+    } else {
+      const priceId = "price_1OrS5sDS4hJmQDZciPMC1so0";
+      const checkOutURL = await getCheckoutUrl(app, priceId);
+      const { value } = await AppLauncher.canOpenUrl({
+        url: checkOutURL,
+      });
+
+      value === false ? console.log("Can open url: ", value) : null;
+      if (value === true) {
+        await AppLauncher.openUrl({
+          url: checkOutURL,
+        });
+      }
+    }
+
+    console.log("doLogin");
+  };
+
   switch (isMember) {
     case true:
       if (memberData) {
@@ -232,10 +267,10 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
                     {nivelCotizatie < 0
                       ? `Restant ${Math.abs(nivelCotizatie)} luni`
                       : nivelCotizatie > 0
-                      ? `${nivelCotizatie} luni în avans`
-                      : "Achitat la zi"}
+                        ? `${nivelCotizatie} luni în avans`
+                        : "Achitat la zi"}
                   </div>
-                  <IonButton routerLink="/plata/cotizatie" expand="full">
+                  <IonButton onClick={plataCotizatie} expand="full">
                     Plateste cotizatia cu cardul
                   </IonButton>
                 </IonCardContent>
@@ -292,9 +327,9 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
               <IonCard>
                 <IonCardTitle>Avizier Central</IonCardTitle>
                 <IonCardContent>
-                  {anunturiCentral?.slice(0, 3).map((anunt, index) => (
-                    <div key={index}>{anunt}</div>
-                  ))}
+                  {anunturiCentral
+                    ?.slice(0, 3)
+                    .map((anunt, index) => <div key={index}>{anunt}</div>)}
                   <IonButton routerLink="/anunturi/Central" expand="full">
                     Vezi toate mesajele
                   </IonButton>
@@ -303,9 +338,9 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
               <IonCard>
                 <IonCardTitle>Avizier Judetean</IonCardTitle>
                 <IonCardContent>
-                  {anunturiJudetean?.slice(0, 3).map((anunt, index) => (
-                    <div key={index}>{anunt}</div>
-                  ))}
+                  {anunturiJudetean
+                    ?.slice(0, 3)
+                    .map((anunt, index) => <div key={index}>{anunt}</div>)}
                   <IonButton routerLink="/anunturi/Judetean" expand="full">
                     Vezi toate mesajele
                   </IonButton>
@@ -314,9 +349,9 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
               <IonCard>
                 <IonCardTitle>Avizier Local</IonCardTitle>
                 <IonCardContent>
-                  {anunturiLocal?.slice(0, 3).map((anunt, index) => (
-                    <div key={index}>{anunt}</div>
-                  ))}
+                  {anunturiLocal
+                    ?.slice(0, 3)
+                    .map((anunt, index) => <div key={index}>{anunt}</div>)}
                   <IonButton routerLink="/anunturi/Local" expand="full">
                     Vezi toate mesajele
                   </IonButton>
@@ -344,7 +379,7 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
               </IonCardTitle>
               <IonCardContent>
                 <div>Nu esti inca membru SDB</div>
-                <IonButton routerLink="/plata/" expand="full">
+                <IonButton onClick={plataCotizatie} expand="full">
                   Doneaza SDB
                 </IonButton>
                 <IonButton routerLink="/adeziune" expand="full">
@@ -357,9 +392,7 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
               <IonCardContent>
                 {anunturiCentral
                   ?.filter((anunt) => anunt.startsWith("🔴"))
-                  .map((anunt, index) => (
-                    <div key={index}>{anunt}</div>
-                  ))}
+                  .map((anunt, index) => <div key={index}>{anunt}</div>)}
                 <IonButton routerLink="/anunturi/Central" expand="full">
                   Vezi toate mesajele
                 </IonButton>
@@ -370,9 +403,7 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
               <IonCardContent>
                 {anunturiJudetean
                   ?.filter((anunt) => anunt.startsWith("🔴"))
-                  .map((anunt, index) => (
-                    <div key={index}>{anunt}</div>
-                  ))}
+                  .map((anunt, index) => <div key={index}>{anunt}</div>)}
                 <IonButton routerLink="/anunturi/Judetean" expand="full">
                   Vezi toate mesajele
                 </IonButton>
@@ -383,9 +414,7 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
               <IonCardContent>
                 {anunturiLocal
                   ?.filter((anunt) => anunt.startsWith("🔴"))
-                  .map((anunt, index) => (
-                    <div key={index}>{anunt}</div>
-                  ))}
+                  .map((anunt, index) => <div key={index}>{anunt}</div>)}
                 <IonButton routerLink="/anunturi/Local" expand="full">
                   Vezi toate mesajele
                 </IonButton>

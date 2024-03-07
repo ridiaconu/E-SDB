@@ -30,7 +30,7 @@ const Plata: React.FC<{ isMember: boolean }> = ({ isMember }) => {
   const plataCotizatie = async (event: any) => {
     event.preventDefault();
     if (isMember) {
-      const priceId = "price_1OrS3FDS4hJmQDZcMZv0zfbc";
+      const priceId = "price_1OjRDhDS4hJmQDZcuvtvhRzM";
       const checkOutURL = await getCheckoutUrl(app, priceId);
       const { value } = await AppLauncher.canOpenUrl({
         url: checkOutURL,
@@ -268,8 +268,7 @@ const Plata: React.FC<{ isMember: boolean }> = ({ isMember }) => {
                       </IonRow>
                     </IonGrid>
                     <IonButton
-                      routerLink="/home/avizier"
-                      type="button"
+                      type="submit"
                       className="ion-margin-top"
                       expand="full"
                     >
