@@ -35,6 +35,9 @@ import {
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
+import { getFunctions } from "firebase/functions";
+import { getApp } from "firebase/app";
+import { httpsCallable } from "firebase/functions";
 
 const Dashboard: React.FC<{ isMember: boolean }> = ({ isMember }) => {
   const fireDb = db;
@@ -127,6 +130,22 @@ const Dashboard: React.FC<{ isMember: boolean }> = ({ isMember }) => {
     }
   }
 
+  async function callDecreaseValueMonthly() {
+    try {
+      const app = getApp();
+      const functions = getFunctions(app);
+      const decreaseValueMonthly = httpsCallable(
+        functions,
+        "decreaseValueMonthly"
+      );
+      await decreaseValueMonthly();
+      console.log("DecreaseValueMonthly function called successfully");
+    } catch (error) {
+      console.error("Error calling DecreaseValueMonthly function:", error);
+      throw error;
+    }
+  }
+
   return (
     <IonPage>
       <IonHeader>
@@ -168,6 +187,18 @@ const Dashboard: React.FC<{ isMember: boolean }> = ({ isMember }) => {
             </div>
             <IonButton routerLink="/createanunt" expand="full">
               Creaza anunt
+            </IonButton>
+          </IonCardContent>
+        </IonCard>
+        <IonCard>
+          <IonCardTitle>Management financiar</IonCardTitle>
+          <IonCardContent>
+            <div>
+              Creaza o noua luna fiscala pentru filiala{" "}
+              {memberData?.data().president}
+            </div>
+            <IonButton onClick={callDecreaseValueMonthly} expand="full">
+              Creaza luna fiscala
             </IonButton>
           </IonCardContent>
         </IonCard>

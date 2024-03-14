@@ -72,29 +72,6 @@ const Docs: React.FC<{ isMember: boolean }> = ({ isMember }) => {
                 <IonButton onClick={openStatut}>Citeste aici</IonButton>
               </IonCardHeader>
             </IonCard>
-
-            <IonCard>
-              <IonCardHeader>
-                <IonCardTitle className="ion-text-center">
-                  Documente SDB
-                </IonCardTitle>
-                <IonRow className="ion-align-items-stretch">
-                  <IonCol className="ion-text-center">
-                    <IonButton routerLink="/organigrama/Local">Local</IonButton>
-                  </IonCol>
-                  <IonCol className="ion-text-center">
-                    <IonButton routerLink="/organigrama/Judetean">
-                      Judetean
-                    </IonButton>
-                  </IonCol>
-                  <IonCol className="ion-text-center">
-                    <IonButton routerLink="/organigrama/Central">
-                      National
-                    </IonButton>
-                  </IonCol>
-                </IonRow>
-              </IonCardHeader>
-            </IonCard>
           </IonContent>
         </IonPage>
       );
