@@ -35,6 +35,7 @@ import Statut from "./pages/Statut";
 import CreateAnunt from "./pages/CreateAnunt";
 import AdeziuniList from "./pages/AdeziuniList";
 import MemberList from "./pages/MemberList";
+import AnunturiManagement from "./pages/AnunturiManagement";
 
 setupIonicReact();
 
@@ -51,6 +52,7 @@ const App: React.FC = () => (
         <Route component={Home} path="/home/" />
         <Route component={Plata} path="/plata/" />
         <Route component={Anunturi} path="/anunturi/:context/" />
+        <Route component={AnunturiManagement} path="/anunturimanagement/" />
         <Route path="/organigrama/:context/" component={Organigrama} />
         <Route component={Statut} path="/statut/" />
         <Route component={CreateAnunt} path="/createanunt/" />

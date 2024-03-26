@@ -234,6 +234,10 @@ const Anunturi: React.FC = () => {
   const openModal = (index: number | null) => setOpenModalIndex(index);
   const closeModal = () => setOpenModalIndex(null);
 
+  const deleteAnunt = async (anunt: DocumentSnapshot<DocumentData>) => {
+    console.log("Deleting anunt:");
+  };
+
   switch (isMember) {
     case true:
       switch (context) {

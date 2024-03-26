@@ -180,6 +180,18 @@ const Dashboard: React.FC<{ isMember: boolean }> = ({ isMember }) => {
           </IonCardContent>
         </IonCard>
         <IonCard>
+          <IonCardTitle>Managementul anunturilor</IonCardTitle>
+          <IonCardContent>
+            <div>
+              Editeaza sau sterge anunturi pentru filiala{" "}
+              {memberData?.data().president}
+            </div>
+            <IonButton routerLink="/anunturimanagement" expand="full">
+              Vezi toate anunturile
+            </IonButton>
+          </IonCardContent>
+        </IonCard>
+        <IonCard>
           <IonCardTitle>Publica un nou anunt</IonCardTitle>
           <IonCardContent>
             <div>
