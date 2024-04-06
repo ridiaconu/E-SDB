@@ -82,7 +82,8 @@ const Dashboard: React.FC<{ isMember: boolean }> = ({ isMember }) => {
     const membersCollection = collection(db, "members");
     const q = query(
       membersCollection,
-      where("filialaLocala", "==", memberData?.data()?.president)
+      where("filialaLocala", "==", memberData?.data()?.president),
+      where("nivelCotizatie", "!=", null)
     );
     const memberCount = await getCountFromServer(q);
     console.log("Member count:", memberCount, Number(memberCount));

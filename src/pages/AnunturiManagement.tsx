@@ -4,11 +4,14 @@ import {
   IonCard,
   IonCardContent,
   IonCardTitle,
+  IonCheckbox,
   IonCol,
   IonContent,
   IonGrid,
   IonHeader,
+  IonInput,
   IonItem,
+  IonLabel,
   IonList,
   IonModal,
   IonPage,
@@ -18,7 +21,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, updateCurrentUser } from "firebase/auth";
 import {
   DocumentData,
   DocumentSnapshot,
@@ -33,6 +36,7 @@ import {
   orderBy,
   query,
   setDoc,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
@@ -138,6 +142,11 @@ const AnunturiManagement: React.FC = () => {
   }
 
   const [openModalIndex, setOpenModalIndex] = useState<number | null>(null);
+  const [anuntEdit, setAnuntEdit] = useState<number | null>(null);
+  const [isInternal, setIsInternal] = useState(false);
+
+  const openEditAnunt = (index: number | null) => setAnuntEdit(index);
+  const closeEditAnunt = () => setAnuntEdit(null);
 
   const openModal = (index: number | null) => setOpenModalIndex(index);
   const closeModal = () => setOpenModalIndex(null);
@@ -155,6 +164,20 @@ const AnunturiManagement: React.FC = () => {
     history.push("/home/dash/");
   };
 
+  const updateAnunt = async (
+    anunt: DocumentSnapshot<DocumentData>,
+    event: any
+  ) => {
+    event.preventDefault();
+    console.log("Updating anunt:");
+    updateDoc(anunt.ref, {
+      titllu: event.target[0].value,
+      content: event.target[1].value,
+      isInternal: isInternal,
+    });
+    closeModal();
+    closeEditAnunt();
+  };
   return (
     <IonPage>
       <IonHeader>
@@ -192,7 +215,65 @@ const AnunturiManagement: React.FC = () => {
               <IonContent className="ion-padding">
                 <div>{anunt.data().content}</div>
               </IonContent>
+              <IonButton onClick={() => openEditAnunt(index)}>
+                Editeaza
+              </IonButton>
               <IonButton onClick={() => deleteAnunt(anunt)}>Sterge</IonButton>
+            </IonModal>
+            <IonModal isOpen={anuntEdit === index}>
+              <IonHeader>
+                <IonToolbar>
+                  <IonTitle>Editeaza anuntul</IonTitle>
+                  <IonButtons slot="end">
+                    <IonButton onClick={() => closeEditAnunt()}>
+                      Close
+                    </IonButton>
+                  </IonButtons>
+                </IonToolbar>
+              </IonHeader>
+              <IonContent>
+                <div className="ion-padding">
+                  <IonCard>
+                    <IonCardContent>
+                      <form onSubmit={(event) => updateAnunt(anunt, event)}>
+                        <IonInput
+                          label="Titlu"
+                          labelPlacement="floating"
+                          fill="outline"
+                          value={anunt.data().titlu}
+                        />
+                        <IonInput
+                          label="Continut"
+                          labelPlacement="floating"
+                          fill="outline"
+                          className="ion-margin-top"
+                          value={anunt.data().content}
+                        />
+
+                        <IonCheckbox
+                          labelPlacement="end"
+                          onIonChange={(e) => setIsInternal(e.detail.checked)}
+                          checked={anunt.data().isInternal}
+                        >
+                          <IonLabel className="ion-text-wrap">
+                            Doresc ca acest anunt sa fie vizibil doar pentru{" "}
+                            <b>membrii </b>
+                            filialei {memberData?.data().president}
+                          </IonLabel>
+                        </IonCheckbox>
+                        <IonButton
+                          routerLink="/home/dash"
+                          type="submit"
+                          className="ion-margin-top"
+                          expand="full"
+                        >
+                          Posteaza anuntul
+                        </IonButton>
+                      </form>
+                    </IonCardContent>
+                  </IonCard>
+                </div>
+              </IonContent>
             </IonModal>
           </IonCard>
         ))}

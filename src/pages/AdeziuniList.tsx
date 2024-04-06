@@ -25,6 +25,7 @@ import {
   QueryDocumentSnapshot,
   collection,
   collectionGroup,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -129,6 +130,10 @@ const AdeziuniList: React.FC = () => {
 
     console.log("Member has been admited");
   }
+  async function refuseMember(adeziune: DocumentSnapshot<DocumentData>) {
+    console.log("Member has been refused");
+    deleteDoc(doc(db, "members", adeziune.id));
+  }
 
   const openModal = (index: number | null) => setOpenModalIndex(index);
   const closeModal = () => setOpenModalIndex(null);
@@ -180,6 +185,9 @@ const AdeziuniList: React.FC = () => {
                 <div>
                   <IonButton onClick={() => admitMember(adeziune)}>
                     Admite in organizatia {memberData?.data()?.president}
+                  </IonButton>
+                  <IonButton onClick={() => refuseMember(adeziune)}>
+                    Refuza cererea de adeziune
                   </IonButton>
                 </div>
               </IonContent>
