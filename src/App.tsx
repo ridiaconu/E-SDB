@@ -36,6 +36,7 @@ import CreateAnunt from "./pages/CreateAnunt";
 import AdeziuniList from "./pages/AdeziuniList";
 import MemberList from "./pages/MemberList";
 import AnunturiManagement from "./pages/AnunturiManagement";
+import CreateFiliala from "./pages/CreateFiliala";
 
 setupIonicReact();
 
@@ -58,6 +59,7 @@ const App: React.FC = () => (
         <Route component={CreateAnunt} path="/createanunt/" />
         <Route path="/cererilist/" component={AdeziuniList} />
         <Route path="/memberslist/" component={MemberList} />
+        <Route path="/createfiliala/" component={CreateFiliala} />
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>

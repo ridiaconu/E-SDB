@@ -203,6 +203,18 @@ const Dashboard: React.FC<{ isMember: boolean }> = ({ isMember }) => {
             </IonButton>
           </IonCardContent>
         </IonCard>
+        {memberData?.data().president === "Central" && (
+          <IonCard>
+            <IonCardTitle>Creeaza o noua filiala</IonCardTitle>
+            <IonCardContent>
+              <div>Creeaza o noua filiala SDB</div>
+              <IonButton routerLink="/createfiliala" expand="full">
+                Creeaza filiala
+              </IonButton>
+            </IonCardContent>
+          </IonCard>
+        )}
+
         <IonCard>
           <IonCardTitle>Management financiar</IonCardTitle>
           <IonCardContent>
