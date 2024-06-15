@@ -7,7 +7,6 @@ import {
   IonToolbar,
   IonList,
   IonItem,
-  IonLabel,
   IonInput,
   IonGrid,
   IonRow,
@@ -15,15 +14,12 @@ import {
   IonButton,
   IonCard,
   IonCardContent,
-  IonIcon,
   IonSelect,
   IonSelectOption,
-  IonCheckbox,
   IonText,
 } from "@ionic/react";
 import { getCheckoutUrl } from "../Stripe";
 import { app } from "../firebase";
-import { useIonRouter } from "@ionic/react";
 import { AppLauncher } from "@capacitor/app-launcher";
 
 const Plata: React.FC<{ isMember: boolean }> = ({ isMember }) => {

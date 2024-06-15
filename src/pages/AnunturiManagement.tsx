@@ -5,48 +5,36 @@ import {
   IonCardContent,
   IonCardTitle,
   IonCheckbox,
-  IonCol,
   IonContent,
-  IonGrid,
   IonHeader,
   IonInput,
-  IonItem,
   IonLabel,
-  IonList,
   IonModal,
   IonPage,
-  IonRow,
-  IonSelect,
-  IonSelectOption,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { onAuthStateChanged, updateCurrentUser } from "firebase/auth";
 import {
   DocumentData,
   DocumentSnapshot,
   QueryDocumentSnapshot,
   collection,
-  collectionGroup,
   deleteDoc,
   doc,
   getDoc,
   getDocs,
-  getFirestore,
   orderBy,
   query,
-  setDoc,
   updateDoc,
-  where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const AnunturiManagement: React.FC = () => {
   const [memberData, setMemberData] = useState<
     QueryDocumentSnapshot | undefined
-  >(undefined); // Use state to store the member data
+  >(undefined);
   const [anunturi, setAnunturi] = useState<QueryDocumentSnapshot[] | undefined>(
     undefined
   );
@@ -59,7 +47,7 @@ const AnunturiManagement: React.FC = () => {
   useEffect(() => {
     async function fetchMemberData() {
       const data = await getMemberData();
-      setMemberData(data); // Update the state with the member data
+      setMemberData(data);
     }
 
     fetchMemberData();
@@ -118,8 +106,7 @@ const AnunturiManagement: React.FC = () => {
     filiala: string
   ): Promise<QueryDocumentSnapshot[] | undefined> {
     const colRef = collection(db, "filiale/" + filiala + "/anunturi");
-    const q = query(colRef, orderBy("timestamp", "desc")); // Order by timestamp in descending order
-
+    const q = query(colRef, orderBy("timestamp", "desc"));
     try {
       const colSnap = await getDocs(q);
       const anunturi: QueryDocumentSnapshot[] = [];

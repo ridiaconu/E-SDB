@@ -15,23 +15,11 @@ import { logoGoogle } from "ionicons/icons";
 import {
   GoogleAuthProvider,
   browserLocalPersistence,
-  browserSessionPersistence,
-  getAuth,
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
 import { useHistory } from "react-router";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  query,
-  where,
-  doc,
-  getDoc,
-  setDoc,
-  persistentLocalCache,
-} from "firebase/firestore";
+import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 
 import { db, auth } from "../firebase";
 
@@ -40,12 +28,11 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState("");
 
   const fireAuth = auth;
-  const history = useHistory(); // Initialize useHistory
+  const history = useHistory();
   const fireDb = db;
   auth.setPersistence(browserLocalPersistence);
 
   const checkUserDocument = async () => {
-    // Get the current user's UID
     const user = auth.currentUser;
     const uid = user ? user.uid : null;
 
@@ -59,7 +46,6 @@ const Login: React.FC = () => {
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
       } else {
-        // docSnap.data() will be undefined in this case
         await setDoc(doc(colref, uid), {
           isMember: false,
           isAdmin: false,
@@ -74,13 +60,11 @@ const Login: React.FC = () => {
 
     try {
       const userCredential = await signInWithPopup(auth, provider);
-      // Signed in with Google
       const user = userCredential.user;
       console.log("User signed in with Google:", user);
       checkUserDocument();
       history.push("/home/avizier");
     } catch (error) {
-      // Handle errors
       console.error("Error signing in with Google:", error);
     }
   };
@@ -90,14 +74,12 @@ const Login: React.FC = () => {
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
         const user = userCredential.user;
         console.log("User signed in:", user);
         checkUserDocument();
         history.push("/home/avizier");
       })
       .catch((error) => {
-        // Handle errors
         console.error("Error signing in:", error);
       });
   };

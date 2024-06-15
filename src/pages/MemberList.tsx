@@ -4,40 +4,24 @@ import {
   IonCard,
   IonCardContent,
   IonCardTitle,
-  IonCol,
   IonContent,
-  IonGrid,
   IonHeader,
-  IonItem,
-  IonList,
   IonModal,
   IonPage,
-  IonRow,
-  IonSelect,
-  IonSelectOption,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { onAuthStateChanged } from "firebase/auth";
 import {
-  DocumentData,
-  DocumentSnapshot,
   QueryDocumentSnapshot,
   collection,
-  collectionGroup,
   doc,
   getDoc,
   getDocs,
-  getFirestore,
-  orderBy,
   query,
-  setDoc,
-  updateDoc,
   where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
-import { useParams } from "react-router-dom";
 
 const MemberList: React.FC = () => {
   const [members, setMembers] = useState<QueryDocumentSnapshot[] | undefined>(
@@ -47,8 +31,7 @@ const MemberList: React.FC = () => {
 
   const [memberData, setMemberData] = useState<
     QueryDocumentSnapshot | undefined
-  >(undefined); // Use state to store the member data
-
+  >(undefined);
   useEffect(() => {
     async function fetchMembers() {
       const data = await getMembers();
@@ -61,7 +44,7 @@ const MemberList: React.FC = () => {
   useEffect(() => {
     async function fetchMemberData() {
       const data = await getMemberData();
-      setMemberData(data); // Update the state with the member data
+      setMemberData(data);
     }
 
     fetchMemberData();

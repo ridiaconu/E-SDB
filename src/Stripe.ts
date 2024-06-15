@@ -7,7 +7,6 @@ import {
   getFirestore,
   onSnapshot,
 } from "firebase/firestore";
-import { getFunctions, httpsCallable } from "firebase/functions";
 
 export const getCheckoutUrl = async (
   app: FirebaseApp,

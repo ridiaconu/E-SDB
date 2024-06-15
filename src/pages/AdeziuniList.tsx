@@ -4,41 +4,26 @@ import {
   IonCard,
   IonCardContent,
   IonCardTitle,
-  IonCol,
   IonContent,
-  IonGrid,
   IonHeader,
-  IonItem,
-  IonList,
   IonModal,
   IonPage,
-  IonRow,
-  IonSelect,
-  IonSelectOption,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { onAuthStateChanged } from "firebase/auth";
 import {
   DocumentData,
   DocumentSnapshot,
   QueryDocumentSnapshot,
   collection,
-  collectionGroup,
   deleteDoc,
   doc,
   getDoc,
   getDocs,
-  getFirestore,
-  orderBy,
-  query,
-  setDoc,
   updateDoc,
-  where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
-import { useParams } from "react-router-dom";
 
 const AdeziuniList: React.FC = () => {
   const [adeziuni, setAdeziuni] = useState<QueryDocumentSnapshot[] | undefined>(
@@ -62,7 +47,7 @@ const AdeziuniList: React.FC = () => {
   useEffect(() => {
     async function fetchMemberData() {
       const data = await getMemberData();
-      setMemberData(data); // Update the state with the member data
+      setMemberData(data);
     }
 
     fetchMemberData();

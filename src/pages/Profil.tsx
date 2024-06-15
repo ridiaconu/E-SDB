@@ -5,9 +5,6 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  IonList,
-  IonItem,
-  IonLabel,
   IonButton,
 } from "@ionic/react";
 import { sendPasswordResetEmail, signOut } from "firebase/auth";
@@ -16,7 +13,7 @@ import { auth } from "../firebase";
 
 const Profil: React.FC<{ isMember: boolean }> = ({ isMember }) => {
   const fireAuth = auth;
-  const history = useHistory(); // Initialize useHistory
+  const history = useHistory();
   const Logout = () => {
     try {
       signOut(auth);
@@ -29,20 +26,17 @@ const Profil: React.FC<{ isMember: boolean }> = ({ isMember }) => {
   };
   const ChangePassword = async () => {
     try {
-      // Get the currently authenticated user
       const userEmail = auth.currentUser?.email;
 
       if (userEmail) {
-        // Send a password reset email to the user's email address
         await sendPasswordResetEmail(auth, userEmail);
 
-        // Sign the user out
         await signOut(auth);
 
         console.log("Password reset email sent and user signed out");
         history.push("/");
       } else {
-        console.log("User not found"); // Handle the case where there's no authenticated user
+        console.log("User not found");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -73,13 +67,7 @@ const Profil: React.FC<{ isMember: boolean }> = ({ isMember }) => {
               >
                 Schimba parola
               </IonButton>
-              <IonButton
-                routerLink="/docs"
-                className="ion-padding-top"
-                expand="block"
-              >
-                Grupuri tematice
-              </IonButton>
+
               <IonButton
                 className="ion-padding-top"
                 expand="block"

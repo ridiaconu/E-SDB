@@ -3,34 +3,19 @@ import {
   IonCard,
   IonCardContent,
   IonCardTitle,
-  IonCol,
   IonContent,
-  IonGrid,
   IonHeader,
-  IonItem,
-  IonList,
   IonPage,
-  IonRow,
-  IonSelect,
-  IonSelectOption,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { onAuthStateChanged } from "firebase/auth";
 import {
-  DocumentData,
-  DocumentSnapshot,
   QueryDocumentSnapshot,
-  and,
   collection,
-  collectionGroup,
   doc,
   getCountFromServer,
   getDoc,
-  getDocs,
-  getFirestore,
   query,
-  setDoc,
   where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
@@ -45,8 +30,7 @@ const Dashboard: React.FC<{ isMember: boolean }> = ({ isMember }) => {
 
   const [memberData, setMemberData] = useState<
     QueryDocumentSnapshot | undefined
-  >(undefined); // Use state to store the member data
-
+  >(undefined);
   const [adeziuni, setAdeziuni] = useState<Number | undefined>(undefined);
 
   const [noMembers, setNoMembers] = useState<Number | undefined>(undefined);
@@ -63,7 +47,7 @@ const Dashboard: React.FC<{ isMember: boolean }> = ({ isMember }) => {
   useEffect(() => {
     async function fetchMemberData() {
       const data = await getMemberData();
-      setMemberData(data); // Update the state with the member data
+      setMemberData(data);
     }
 
     fetchMemberData();

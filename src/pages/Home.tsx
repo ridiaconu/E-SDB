@@ -1,46 +1,19 @@
 import {
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardTitle,
-  IonContent,
-  IonHeader,
   IonIcon,
-  IonPage,
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
   IonTabs,
-  IonTitle,
-  IonToolbar,
 } from "@ionic/react";
-import {
-  person,
-  call,
-  settings,
-  home,
-  document,
-  personCircle,
-} from "ionicons/icons";
+import { settings, home, document, personCircle } from "ionicons/icons";
 import React, { createContext, useEffect, useState } from "react";
 import Avizier from "./Avizier";
 import { Route } from "react-router";
 import Docs from "./Docs";
 import Profil from "./Profil";
 import Plata from "./Plata";
-import {
-  browserLocalPersistence,
-  browserSessionPersistence,
-  getAuth,
-  setPersistence,
-} from "firebase/auth";
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  collection,
-  setDoc,
-} from "firebase/firestore";
+import { browserLocalPersistence } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 import { auth, db } from "../firebase";
 import Dashboard from "./Dashboard";
@@ -69,10 +42,8 @@ const Home: React.FC = () => {
       if (docSnap.exists()) {
         memberStatus = docSnap.data().isMember;
         if (memberStatus == true) {
-          //console.log("membru");
           return true;
         } else {
-          //console.log("numembu");
           return false;
         }
       } else {
@@ -96,7 +67,6 @@ const Home: React.FC = () => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          //console.log("Member data:", docSnap.data());
           return docSnap.data()?.isAdmin;
         } else {
           console.log("Member does not exist");
@@ -115,7 +85,6 @@ const Home: React.FC = () => {
   useEffect(() => {
     async function fetchMemberStatus() {
       const memberStatus = await getMemberStatus();
-      //localStorage.setItem(isMember, memberStatus);
       setIsMember(memberStatus);
     }
     fetchMemberStatus();

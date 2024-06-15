@@ -38,7 +38,7 @@ const Organigrama: React.FC = () => {
   >(undefined);
   const [memberData, setMemberData] = useState<
     QueryDocumentSnapshot | undefined
-  >(undefined); // Use state to store the member data
+  >(undefined);
   const [filialeLocale, setFilialeLocale] = useState<Array<String> | undefined>(
     undefined
   );
@@ -97,7 +97,6 @@ const Organigrama: React.FC = () => {
         return undefined;
       } else {
         const birouData = new Map(Object.entries(docSnap.data().birou));
-        //console.log(birouData);
         return birouData;
       }
     } catch (error) {
@@ -167,7 +166,7 @@ const Organigrama: React.FC = () => {
   useEffect(() => {
     async function fetchMemberData() {
       const data = await getMemberData();
-      setMemberData(data); // Update the state with the member data
+      setMemberData(data);
     }
 
     fetchMemberData();
@@ -176,7 +175,7 @@ const Organigrama: React.FC = () => {
   useEffect(() => {
     async function fetchFilialeJudetene() {
       const data = await getFilialeJudetene();
-      setFilialeJudetene(data); // Update the state with the member data
+      setFilialeJudetene(data);
     }
 
     fetchFilialeJudetene();
@@ -185,7 +184,7 @@ const Organigrama: React.FC = () => {
   useEffect(() => {
     async function fetchFilialeLocale() {
       const data = await getFilialeLocale();
-      setFilialeLocale(data); // Update the state with the member data
+      setFilialeLocale(data);
     }
 
     fetchFilialeLocale();
@@ -197,10 +196,6 @@ const Organigrama: React.FC = () => {
         const presedinte = birouCentral.get("presedinte");
         const vicepresedinti = birouCentral.get("vicepresedinti");
         const membrii = birouCentral.get("membriiBirou");
-        //console.log(presedinte);
-        //console.log(vicepresedinti);
-        //console.log(membrii);
-
         return (
           <IonPage>
             <IonHeader>

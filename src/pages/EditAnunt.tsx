@@ -1,33 +1,22 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   IonContent,
   IonHeader,
   IonPage,
   IonTitle,
   IonToolbar,
-  IonList,
-  IonItem,
   IonLabel,
   IonInput,
-  IonGrid,
-  IonRow,
-  IonCol,
   IonButton,
   IonCard,
   IonCardContent,
-  IonIcon,
-  IonSelect,
-  IonSelectOption,
   IonCheckbox,
 } from "@ionic/react";
-import { logoGoogle } from "ionicons/icons";
 import { auth, db } from "../firebase";
 import {
   doc,
   getDoc,
   collection,
-  setDoc,
-  getDocs,
   QueryDocumentSnapshot,
   addDoc,
 } from "firebase/firestore";
@@ -35,11 +24,11 @@ import {
 const EditAnunt = () => {
   const [memberData, setMemberData] = useState<
     QueryDocumentSnapshot | undefined
-  >(undefined); // Use state to store the member data
+  >(undefined);
   useEffect(() => {
     async function fetchMemberData() {
       const data = await getMemberData();
-      setMemberData(data); // Update the state with the member data
+      setMemberData(data);
     }
 
     fetchMemberData();

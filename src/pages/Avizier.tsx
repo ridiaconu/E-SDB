@@ -16,34 +16,27 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { onAuthStateChanged } from "firebase/auth";
 import {
-  DocumentData,
-  DocumentSnapshot,
   QueryDocumentSnapshot,
   collection,
-  collectionGroup,
   doc,
   getDoc,
   getDocs,
-  getFirestore,
   limit,
   orderBy,
   query,
-  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { app, auth, db } from "../firebase";
-import { currentMember } from "../Auth";
 import { getCheckoutUrl } from "../Stripe";
 import { AppLauncher } from "@capacitor/app-launcher";
 
 const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
   const [memberData, setMemberData] = useState<
     QueryDocumentSnapshot | undefined
-  >(undefined); // Use state to store the member data
+  >(undefined);
   const [anunturiCentral, setAnunturiCentral] = useState<
     Array<String> | undefined
   >(undefined);
@@ -66,7 +59,7 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
   useEffect(() => {
     async function fetchMemberData() {
       const data = await getMemberData();
-      setMemberData(data); // Update the state with the member data
+      setMemberData(data);
     }
 
     fetchMemberData();
@@ -110,7 +103,7 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
   useEffect(() => {
     async function fetchFilialeJudetene() {
       const data = await getFilialeJudetene();
-      setFilialeJudetene(data); // Update the state with the member data
+      setFilialeJudetene(data);
     }
 
     fetchFilialeJudetene();
@@ -119,7 +112,7 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
   useEffect(() => {
     async function fetchFilialeLocale() {
       const data = await getFilialeLocale();
-      setFilialeLocale(data); // Update the state with the member data
+      setFilialeLocale(data);
     }
 
     fetchFilialeLocale();
@@ -154,7 +147,7 @@ const Avizier: React.FC<{ isMember: boolean }> = ({ isMember }) => {
 
   async function getAnunturi(filiala: String): Promise<String[] | undefined> {
     const colRef = collection(db, "filiale/" + filiala + "/anunturi");
-    const q = query(colRef, orderBy("timestamp", "desc"), limit(3)); // Order by timestamp in descending order
+    const q = query(colRef, orderBy("timestamp", "desc"), limit(3));
     try {
       const colSnap = await getDocs(q);
       const titles = [];

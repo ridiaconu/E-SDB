@@ -4,35 +4,27 @@ import {
   IonCard,
   IonCardContent,
   IonCardTitle,
-  IonCol,
   IonContent,
-  IonGrid,
   IonHeader,
   IonItem,
   IonList,
   IonModal,
   IonPage,
-  IonRow,
   IonSelect,
   IonSelectOption,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { onAuthStateChanged } from "firebase/auth";
 import {
   DocumentData,
   DocumentSnapshot,
   QueryDocumentSnapshot,
   collection,
-  collectionGroup,
   doc,
   getDoc,
   getDocs,
-  getFirestore,
   orderBy,
   query,
-  setDoc,
-  where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
@@ -67,7 +59,7 @@ const Anunturi: React.FC = () => {
   useEffect(() => {
     async function fetchMemberData() {
       const data = await getMemberData();
-      setMemberData(data); // Update the state with the member data
+      setMemberData(data);
     }
 
     fetchMemberData();
@@ -111,7 +103,7 @@ const Anunturi: React.FC = () => {
   useEffect(() => {
     async function fetchFilialeJudetene() {
       const data = await getFilialeJudetene();
-      setFilialeJudetene(data); // Update the state with the member data
+      setFilialeJudetene(data);
     }
 
     fetchFilialeJudetene();
@@ -120,7 +112,7 @@ const Anunturi: React.FC = () => {
   useEffect(() => {
     async function fetchFilialeLocale() {
       const data = await getFilialeLocale();
-      setFilialeLocale(data); // Update the state with the member data
+      setFilialeLocale(data);
     }
 
     fetchFilialeLocale();
@@ -166,7 +158,7 @@ const Anunturi: React.FC = () => {
     filiala: string
   ): Promise<QueryDocumentSnapshot[] | undefined> {
     const colRef = collection(db, "filiale/" + filiala + "/anunturi");
-    const q = query(colRef, orderBy("timestamp", "desc")); // Order by timestamp in descending order
+    const q = query(colRef, orderBy("timestamp", "desc"));
 
     try {
       const colSnap = await getDocs(q);

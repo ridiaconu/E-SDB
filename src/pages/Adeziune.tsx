@@ -20,7 +20,6 @@ import {
   IonSelectOption,
   IonCheckbox,
 } from "@ionic/react";
-import { logoGoogle } from "ionicons/icons";
 import { auth, db } from "../firebase";
 import { doc, getDoc, collection, setDoc, getDocs } from "firebase/firestore";
 
@@ -39,7 +38,6 @@ const createMember = async (event: any) => {
     if (docSnap.exists()) {
       console.log("Member already exists");
     } else {
-      // docSnap.data() will be undefined in this case
       await setDoc(doc(colref, uid), {
         nume: {
           numeFamilie: event.target[1].value,
@@ -69,7 +67,7 @@ const Adeziune = () => {
   useEffect(() => {
     async function fetchFilialeJudetene() {
       const data = await getFilialeJudetene();
-      setFilialeJudetene(data); // Update the state with the member data
+      setFilialeJudetene(data);
     }
 
     fetchFilialeJudetene();
@@ -78,7 +76,7 @@ const Adeziune = () => {
   useEffect(() => {
     async function fetchFilialeLocale() {
       const data = await getFilialeLocale();
-      setFilialeLocale(data); // Update the state with the member data
+      setFilialeLocale(data);
     }
 
     fetchFilialeLocale();
